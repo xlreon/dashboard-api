@@ -14,22 +14,30 @@ app.use(bodyParser.urlencoded({
  }));
 //  app.use(bodyParser.json());
 
-var message = {
-    to: 'cIRJQ-uhjFw:APA91bEQF6o29nvidjgLZmprBcNN-VTS9woYWyAZeQ7bgY7AKQHTjBCptk3yacK-phTp4_VXtwULRUvosWSRy03wT7uv2lB6mm0N_Sv4je7S3b9br3YQdi5DW4nND5gbvfDjY6vvTwQcWuU5j9Y2c2qFCfNieg6FpQ',
-    notification: {
-        title: "Test",
-        body: "Test"
-    }
-}
-
 app.get('/',(req,res) => {
     res.send('hello world')
+
+})
+
+app.get("/test",(req,res) => {
+
+    console.log(req.params.token)
+
+    var message = {
+        // to: 'cIRJQ-uhjFw:APA91bEQF6o29nvidjgLZmprBcNN-VTS9woYWyAZeQ7bgY7AKQHTjBCptk3yacK-phTp4_VXtwULRUvosWSRy03wT7uv2lB6mm0N_Sv4je7S3b9br3YQdi5DW4nND5gbvfDjY6vvTwQcWuU5j9Y2c2qFCfNieg6FpQ',
+        to: req.query.token,
+        notification: {
+            title: "Test",
+            body: "Test"
+        }
+    }
+
     fcm.send(message, (err,response) => {
         if(err) {
             console.log('Error')
         }
         else {
-            console.log('success')
+            console.log('Notidication sent to token id')
             console.log(response)
         }
     })
