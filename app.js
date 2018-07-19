@@ -4,10 +4,15 @@ var serverKey = "AAAAtq-PMqs:APA91bEgY4eGZZU5vf8cTFRkiUUnnAq7sRL9owz8170x-tuv8-c
 var fcm = new FCM(serverKey)
 var easyPbkdf2 = require("easy-pbkdf2")();
 var salt = easyPbkdf2.generateSalt();
-
+var bodyParser = require("body-parser");
 
 
 var app = express()
+
+app.use(bodyParser.urlencoded({
+    extended: true
+ }));
+//  app.use(bodyParser.json());
 
 var message = {
     to: 'cIRJQ-uhjFw:APA91bEQF6o29nvidjgLZmprBcNN-VTS9woYWyAZeQ7bgY7AKQHTjBCptk3yacK-phTp4_VXtwULRUvosWSRy03wT7uv2lB6mm0N_Sv4je7S3b9br3YQdi5DW4nND5gbvfDjY6vvTwQcWuU5j9Y2c2qFCfNieg6FpQ',
@@ -32,24 +37,25 @@ app.get('/',(req,res) => {
 
 app.post('/register',(req,res)=>{
     
-    console.log(req);
-    
-    // var name = req.name
-    // // var email = req.email
-    // var token = req.token
-    // var password = req.password
-    // var imei = req.imei
+    var name = req.body.name
+    var email = req.body.email
+    var token = req.body.token
+    var password = req.body.password
+    var imei = req.body.imei
+    var hashedPassword = password
     // var password = "abcd"
-
-    // console.log(name+"\n")
-    // console.log(email+"\n")
-    // console.log(token+"\n")
-    // console.log(imei+"\n")
-
-    easyPbkdf2.secureHash( password, salt, function( err, passwordHash, originalSalt ) { 
-        console.log(passwordHash)
-    })
-
+    
+    
+    callback = ( err, passwordHash, originalSalt ) => { 
+        hashedPassword=passwordHash
+        console.log(name+"\n")
+        console.log(email+"\n")
+        console.log(token+"\n")
+        console.log(imei+"\n")
+        console.log(hashedPassword+"\n")
+    }
+    
+    easyPbkdf2.secureHash( password, salt, callback)
 })
 
-app.listen("5050")
+app.listen("8080")
