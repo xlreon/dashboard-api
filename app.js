@@ -21,15 +21,21 @@ app.get('/',(req,res) => {
 
 app.get("/test",(req,res) => {
 
-    console.log(req.params.token)
+    console.log(req.query.token)
 
     var message = {
         // to: 'cIRJQ-uhjFw:APA91bEQF6o29nvidjgLZmprBcNN-VTS9woYWyAZeQ7bgY7AKQHTjBCptk3yacK-phTp4_VXtwULRUvosWSRy03wT7uv2lB6mm0N_Sv4je7S3b9br3YQdi5DW4nND5gbvfDjY6vvTwQcWuU5j9Y2c2qFCfNieg6FpQ',
         to: req.query.token,
+        // message_id: "ajsdhak",
+        // priority: "high",
+        // data: {
+        //     command: "gps"
+        // }, 
         notification: {
             title: "Test",
             body: "Test"
         }
+
     }
 
     fcm.send(message, (err,response) => {
@@ -38,7 +44,7 @@ app.get("/test",(req,res) => {
         }
         else {
             console.log('Notidication sent to token id')
-            console.log(response)
+            console.log(JSON.parse(response).results)
         }
     })
 })
@@ -64,6 +70,23 @@ app.post('/register',(req,res)=>{
     }
     
     easyPbkdf2.secureHash( password, salt, callback)
+})
+
+app.post('/login',(req,res)=> {
+    var email = req.body.email
+    var password = req.body.password
+    var imei = req.body.imei
+    var hashedPassword = password
+
+    callback = (err, passwordHash, originalSalt ) => {
+        hashedPassword = passwordHash
+        console.log(email+"\n")
+        console.log(password+"\n")
+        console.log(imei+"\n")
+        console.log(hashedPassword+"\n")
+    }
+
+    easyPbkdf2.secureHash(password, salt, callback)
 })
 
 app.listen("8080")
