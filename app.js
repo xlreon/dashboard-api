@@ -89,29 +89,56 @@ app.post('/login',(req,res)=> {
     easyPbkdf2.secureHash(password, salt, callback)
 })
 
-featureList = {
-    gps: "/feature/gps",
-    erase: "/feature/erase",
-    playSound: "/feature/playsound",
-    getCellLocation: "/feature/getcelllocation"
+// featureList = {
+//     location: "/feature/location",
+//     wipe: "/feature/wipe",
+//     alarmOn: "/feature/alarm/on",
+//     alarmOff: "/feature/alarm/off",
+//     setRemotePassword: "/feature/setremotepassword",
+//     lock: "/feature/lock"
+// }
+
+var commands = {
+    "wipe": {
+        "command": "wipe"
+    },
+    "alarmOn" : {
+        "command": "alarm",
+        "action": "on"
+    },
+    "alarmOff" : {
+        "command": "alarm",
+        "action": "off"
+    },
+    "setRemotePassword" : {
+        "command": "password",
+        "pass": "1234",
+        "custom": "true", // true or false depending on the message
+        "message": "This phone is lost", // optional
+        "phone": "9090909090" // optional
+    },
+    "lock": {
+        "command": "lock"
+    },
+    "location": {
+        "command": "location"
+    }
 }
 
-Object.keys(featureList).map((key) => {
-    app.get(featureList[key],(req,res) => {
-        console.log("Current feature -> ",key)
-        switch(key) {
-            case "gps": console.log("Geting location")
-                                break;
-            case "erase": console.log("Earsing data")
-                                break;
-            case "playsound": console.log("Playing sound")
-                                break;
-            case "getCellLocation": console.log("Get cell Tower location")
-                                break;
-            default: console.log("Incorrect feature request")                    
 
-        }
+
+getCommand = (commandName,token) => {
+        return {
+            to: token,
+            priority: "high",
+            data: commands[commandName]
+            }
+        }               
+
+    app.post("/feature",(req,res) => {
+        var featureName = req.body.featureName
+        console.log("Current feature -> ",featureName)
+        console.log(getCommand(featureName,"SET TOKEN ID HERE"))
     })
-})
 
 app.listen("8080")
