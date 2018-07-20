@@ -89,4 +89,29 @@ app.post('/login',(req,res)=> {
     easyPbkdf2.secureHash(password, salt, callback)
 })
 
+featureList = {
+    gps: "/feature/gps",
+    erase: "/feature/erase",
+    playSound: "/feature/playsound",
+    getCellLocation: "/feature/getcelllocation"
+}
+
+Object.keys(featureList).map((key) => {
+    app.get(featureList[key],(req,res) => {
+        console.log("Current feature -> ",key)
+        switch(key) {
+            case "gps": console.log("Geting location")
+                                break;
+            case "erase": console.log("Earsing data")
+                                break;
+            case "playsound": console.log("Playing sound")
+                                break;
+            case "getCellLocation": console.log("Get cell Tower location")
+                                break;
+            default: console.log("Incorrect feature request")                    
+
+        }
+    })
+})
+
 app.listen("8080")
