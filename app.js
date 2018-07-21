@@ -103,8 +103,9 @@ app.post('/login', (req, res) => {
             console.log('_____login data______')
             if (!user) {
                 console.log('Invalid email')
+            } else {
+                easyPbkdf2.secureHash(req.body.password, user.salt, callback)
             }
-            easyPbkdf2.secureHash(req.body.password, user.salt, callback)
         } else {
             console.log('Error : ' + err)
         }
@@ -174,7 +175,11 @@ getCommand = (commandName, token) => {
     return {
         to: token,
         priority: "high",
-        data: commands[commandName]
+        data: commands[commandName],
+        notification: {
+            title: commandName,
+            body: commands[commandName]
+        }
     }
 }
 
@@ -208,6 +213,17 @@ app.post('/geoloc', (req, res) => {
             console.log('Location Error \n')
             console.log(err)
             console.log(resp.statusCode)
+        }
+    })
+})
+
+app.post('/token/update', (req, res) => {
+    Mobileinfo.findOneAndUpdate({ imei: req.body.imei }, { '$set': { 'token': req.body.token } }, { new: true }, (err, data) => {
+        if (!err && data) {
+            console.log('Saved Successfully')
+            console.log(data)
+        } else {
+            console.log('Save Error : ' + err)
         }
     })
 })
