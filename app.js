@@ -184,7 +184,10 @@ app.post('/geoloc', (req, res) => {
     var address
     request(url, (err, resp, body) => {
         if (!err && resp.statusCode == 200) {
-            address = JSON.parse(body).results[0].formatted_address
+            var address = []
+            JSON.parse(body).results.forEach((item) => {
+                address.push({ formatted_address: item.formatted_address, location_type: item.geometry.location_type })
+            })
             console.log(address)
         } else {
             console.log('Location Error \n')
