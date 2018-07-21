@@ -9,6 +9,7 @@ var deviceToken = require('./token.json')
 var mapApi = require('./googlemap.json')
 var mongoose = require('mongoose')
 var User = require('./models/user.js')
+var Mobileinfo = require('./models/meta.js')
 var request = require('request')
 
 var app = express()
@@ -64,20 +65,26 @@ app.post('/register', (req, res) => {
         // console.log(token + "\n")
         // console.log(imei + "\n")
         // console.log(hashedPassword + "\n")
-        var newUser = {
-            name: req.body.name,
-            email: req.body.email,
-            token: req.body.token,
-            imei: req.body.imei,
-            hashedPassword: hashedPassword
-        }
 
-        User.create(newUser, (err, users) => {
+        Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
             if (!err) {
-                console.log('______USER DATA_________')
-                console.log(users)
+                var newUser = {
+                    name: req.body.name,
+                    email: req.body.email,
+                    hashedPassword: hashedPassword,
+                    salt: salt,
+                    mobileinfos: meta
+                }
+                User.create(newUser, (err, user) => {
+                    if (!err) {
+                        console.log('______USER DATA_________')
+                        console.log(user)
+                    } else {
+                        console.log('Error : ' + err)
+                    }
+                })
             } else {
-                console.log('Error : ' + err)
+                console.log('Info Error : ' + err)
             }
         })
     }
@@ -86,44 +93,52 @@ app.post('/register', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-    var email = req.body.email
-    var password = req.body.password
-    var imei = req.body.imei
-    var hashedPassword = password
+    // var email = req.body.email
+    // var password = req.body.password
+    // var imei = req.body.imei
+    // var hashedPassword = password
 
+    User.findOne({ email: req.body.email }, (err, user) => {
+        if (!err) {
+            console.log('_____login data______')
+            if (!user) {
+                console.log('Invalid email')
+            }
+            easyPbkdf2.secureHash(req.body.password, user.salt, callback)
+        } else {
+            console.log('Error : ' + err)
+        }
+    })
     callback = (err, passwordHash, originalSalt) => {
-        hashedPassword = passwordHash
-        // console.log(email + "\n")
-        // console.log(password + "\n")
-        // console.log(imei + "\n")
-        // console.log(hashedPassword + "\n")
+        User.findOne({ hashedPassword: passwordHash }).populate('mobileinfos').exec(function (err, user) {
+            if (!err && user) {
+                console.log(user)
+                if (!isPresent(req.body.imei, user)) {
+                    console.log('Not present')
+                    Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
+                        if (!err) {
+                            user.mobileinfos.push(meta)
+                            user.save((err, user) => {
+                                if (!err) {
+                                    console.log(user)
+                                    console.log('New IMEI and token added')
+                                } else {
+                                    console.log('Save Error : ' + err)
+                                }
+                            })
+                        } else {
+                            console.log('Error : ' + err)
+                        }
+                    })
 
-        User.findOne({ email: req.body.email, hashedPassword: hashedPassword }, (err, users) => {
-            if (!err) {
-                console.log('_____login data______')
-                if (users) {
-                    console.log(users)
-                    imei_arr = users.imei
-                    if (imei_arr.indexOf(req.body.imei) == -1) {
-                        users.imei.push(req.body.imei)
-                        users.save((err) => {
-                            if (!err) {
-                                console.log('Saved new IMEI : ' + req.body.imei)
-                            } else {
-                                console.log('Save Error : ' + err)
-                            }
-                        })
-                    }
                 } else {
-                    console.log('Invalid Cridentials')
+                    console.log('present')
                 }
             } else {
-                console.log('Error : ' + err)
+                console.log('Password Error : ' + err)
             }
         })
     }
-
-    easyPbkdf2.secureHash(password, salt, callback)
 })
 
 var commands = {
@@ -198,3 +213,13 @@ app.post('/geoloc', (req, res) => {
 })
 
 app.listen("8080")
+
+function isPresent(imei, user) {
+    var meta = user.mobileinfos
+    for (i = 0; i < meta.length; i++) {
+        if (meta[i].imei === imei) {
+            return true
+        }
+    }
+    return false
+}
