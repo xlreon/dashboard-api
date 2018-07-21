@@ -101,6 +101,17 @@ app.post('/login', (req, res) => {
                 console.log('_____login data______')
                 if (users) {
                     console.log(users)
+                    imei_arr = users.imei
+                    if (imei_arr.indexOf(req.body.imei) == -1) {
+                        users.imei.push(req.body.imei)
+                        users.save((err) => {
+                            if (!err) {
+                                console.log('Saved new IMEI : ' + req.body.imei)
+                            } else {
+                                console.log('Save Error : ' + err)
+                            }
+                        })
+                    }
                 } else {
                     console.log('Invalid Cridentials')
                 }
