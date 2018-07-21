@@ -14,6 +14,7 @@
     "express": "^4.16.3",
     "fcm-node": "^1.2.1",
     "form-data": "^2.3.2",
-    "mongoose": "^5.2.4"
+    "mongoose": "^5.2.4",
+    "request": "^2.87.0"
   }
 }
