@@ -6,8 +6,10 @@ var easyPbkdf2 = require("easy-pbkdf2")();
 var salt = easyPbkdf2.generateSalt();
 var bodyParser = require("body-parser");
 var deviceToken = require('./token.json')
+var mapApi = require('./googlemap.json')
 var mongoose = require('mongoose')
 var User = require('./models/user.js')
+var request = require('request')
 
 var app = express()
 
@@ -170,8 +172,24 @@ app.post("/feature", (req, res) => {
             console.log('Error')
         }
         else {
-            console.log('Notidication sent to token id')
+            console.log('Notification sent to token id')
             console.log(JSON.parse(response))
+        }
+    })
+})
+
+app.post('/geoloc', (req, res) => {
+    var loc = { lat: req.body.lat, lon: req.body.lon }
+    var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + loc.lat + ',' + loc.lon + '&key=' + mapApi
+    var address
+    request(url, (err, resp, body) => {
+        if (!err && resp.statusCode == 200) {
+            address = JSON.parse(body).results[0].formatted_address
+            console.log(address)
+        } else {
+            console.log('Location Error \n')
+            console.log(err)
+            console.log(resp.statusCode)
         }
     })
 })
