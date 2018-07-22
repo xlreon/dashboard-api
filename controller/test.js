@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var serverKey = require('../serverKey.json')
+var serverKey = require('../keys/serverKey.json')
 var FCM = require('fcm-node')
 var fcm = new FCM(serverKey)
 var bodyParser = require("body-parser")

@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router();
 var Mobileinfo = require('../models/meta')
 var request = require('request')
-var mapApi = require('../googlemap.json')
+var mapApi = require('../keys/googlemap.json')
 var bodyParser = require("body-parser")
 
 router.use(bodyParser.urlencoded({ extended: true }))
