@@ -16,17 +16,21 @@ var app = express()
 
 mongoose.connect('mongodb://localhost:27017/dashboard', { useNewUrlParser: true })
 
+routes = [
+    test,
+    register,
+    login,
+    feature,
+    geoloc,
+    mult,
+    multget,
+    tokenupdt,
+    phoneset,
+    phoneget
+]
+
 // use routers
-app.use(test)
-app.use(register)
-app.use(login)
-app.use(feature)
-app.use(geoloc)
-app.use(mult)
-app.use(multget)
-app.use(tokenupdt)
-app.use(phoneset)
-app.use(phoneget)
+routes.map((route)=>app.use(route))
 
 // root route
 app.get('/', (req, res) => {
