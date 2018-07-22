@@ -19,6 +19,7 @@ mongoose.connect('mongodb://localhost:27017/dashboard', { useNewUrlParser: true 
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
     res.send('hello world')
@@ -224,6 +225,30 @@ app.post('/token/update', (req, res) => {
             console.log(data)
         } else {
             console.log('Save Error : ' + err)
+        }
+    })
+})
+
+app.post('/phone/set', (req, res) => {
+    // console.log(req.body.specs)
+    device_data = req.body.specs
+    Mobileinfo.findOneAndUpdate({ imei: req.body.imei }, { '$set': { 'device': device_data } }, { new: true }, (err, data) => {
+        if (!err && data) {
+            console.log(data)
+        } else {
+            console.log('Invalid IMEI')
+            console.log('Error : ' + err)
+        }
+    })
+})
+
+app.post('/phone/get', (req, res) => {
+    Mobileinfo.findOne({ imei: req.body.imei }, (err, data) => {
+        if (!err && data) {
+            console.log(data.device)
+        } else {
+            console.log('No such device')
+            console.log('Error : ' + err)
         }
     })
 })
