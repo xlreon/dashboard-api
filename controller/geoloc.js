@@ -31,7 +31,7 @@ router.post('/geoloc', (req, res) => {
                             content: address
                         }
                     }
-                    res.send(JSON.stringify(response))
+                    res.send(response)
                 } else {
                     response = {
                         status: -7,
@@ -41,7 +41,7 @@ router.post('/geoloc', (req, res) => {
                             content: resp.statusCode
                         }
                     }
-                    res.send(JSON.stringify(response))
+                    res.send(response)
                 }
             })
         }
@@ -54,7 +54,7 @@ router.post('/geoloc', (req, res) => {
                     content: null
                 }
             }
-            res.send(JSON.stringify(response))
+            res.send(response)
         }
     })
 })

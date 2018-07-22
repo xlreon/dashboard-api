@@ -47,7 +47,7 @@ router.post('/register', (req, res) => {
                                 content: null
                             }
                         }
-                        res.send(JSON.stringify(response))
+                        res.send(response)
                     } else {
                         response = {
                             status: -2,
@@ -57,7 +57,7 @@ router.post('/register', (req, res) => {
                                 content: null
                             }
                         }
-                        res.send(JSON.stringify(response))
+                        res.send(response)
                     }
                 })
             } else {
@@ -69,7 +69,7 @@ router.post('/register', (req, res) => {
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             }
         })
     }

@@ -28,7 +28,7 @@ router.post('/login', (req, res) => {
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             } else {
                 easyPbkdf2.secureHash(req.body.password, user.salt, callback)
             }
@@ -41,7 +41,7 @@ router.post('/login', (req, res) => {
                     content: null
                 }
             }
-            res.send(JSON.stringify(response))
+            res.send(response)
         }
     })
     callback = (err, passwordHash, originalSalt) => {
@@ -64,7 +64,7 @@ router.post('/login', (req, res) => {
                                             content: null
                                         }
                                     }
-                                    res.send(JSON.stringify(response))
+                                    res.send(response)
                                 } else {
                                     response = {
                                         status: -2,
@@ -74,7 +74,7 @@ router.post('/login', (req, res) => {
                                             content: null
                                         }
                                     }
-                                    res.send(JSON.stringify(response))
+                                    res.send(response)
                                 }
                             })
                         } else {
@@ -86,7 +86,7 @@ router.post('/login', (req, res) => {
                                     content: null
                                 }
                             }
-                            res.send(JSON.stringify(response))
+                            res.send(response)
                         }
                     })
 
@@ -101,7 +101,7 @@ router.post('/login', (req, res) => {
                             }
                         }
                     }
-                    res.send(JSON.stringify(response))
+                    res.send(response)
                 }
             } else {
                 response = {
@@ -112,7 +112,7 @@ router.post('/login', (req, res) => {
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             }
         })
     }

@@ -19,7 +19,7 @@ router.post('/token/update', (req, res) => {
                     content: null
                 }
             }
-            res.send(JSON.stringify(response))
+            res.send(response)
         } else {
             if (!data) {
                 response = {
@@ -30,7 +30,7 @@ router.post('/token/update', (req, res) => {
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             } else {
                 response = {
                     status: -3,
@@ -40,7 +40,7 @@ router.post('/token/update', (req, res) => {
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             }
         }
     })

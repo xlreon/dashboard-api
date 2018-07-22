@@ -33,7 +33,7 @@ router.post('/mult/update', upload.array('mult'), (req, res) => { // mult showld
                             }
                         }
                     }
-                    res.send(JSON.stringify(response))
+                    res.send(response)
                 } else {
                     response = {
                         status: -2,
@@ -43,7 +43,7 @@ router.post('/mult/update', upload.array('mult'), (req, res) => { // mult showld
                             content: null
                         }
                     }
-                    res.send(JSON.stringify(response))
+                    res.send(response)
                 }
             })
         } else {
@@ -56,7 +56,7 @@ router.post('/mult/update', upload.array('mult'), (req, res) => { // mult showld
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             } else {
                 response = {
                     status: -2,
@@ -66,7 +66,7 @@ router.post('/mult/update', upload.array('mult'), (req, res) => { // mult showld
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             }
         }
     })

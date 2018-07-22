@@ -23,7 +23,7 @@ router.post('/mult/get', (req, res) => {
                         }
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             } else {
                 response = {
                     status: -8,
@@ -36,7 +36,7 @@ router.post('/mult/get', (req, res) => {
                         }
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             }
         } else {
             if (!user) {
@@ -48,7 +48,7 @@ router.post('/mult/get', (req, res) => {
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             } else {
                 response = {
                     status: -2,
@@ -58,7 +58,7 @@ router.post('/mult/get', (req, res) => {
                         content: null
                     }
                 }
-                res.send(JSON.stringify(response))
+                res.send(response)
             }
         }
     })

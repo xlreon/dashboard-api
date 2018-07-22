@@ -66,7 +66,7 @@ router.post("/feature", (req, res) => {
                     content: null
                 }
             }
-            res.send(JSON.stringify(response))
+            res.send(response)
         }
         else {
             console.log('Notification sent to token id')
@@ -78,7 +78,7 @@ router.post("/feature", (req, res) => {
                     content: result
                 }
             }
-            res.send(JSON.stringify(response))
+            res.send(response)
         }
     })
 })
