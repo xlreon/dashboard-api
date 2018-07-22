@@ -7,6 +7,7 @@ var test = require('./controller/test.js'),
     feature = require('./controller/feature.js'),
     geoloc = require('./controller/geoloc.js'),
     mult = require('./controller/mult.js'),
+    multget = require('./controller/multget'),
     tokenupdt = require('./controller/tokenupdt.js'),
     phoneset = require('./controller/phoneset.js'),
     phoneget = require('./controller/phoneget.js')
@@ -22,6 +23,7 @@ app.use(login)
 app.use(feature)
 app.use(geoloc)
 app.use(mult)
+app.use(multget)
 app.use(tokenupdt)
 app.use(phoneset)
 app.use(phoneget)
