@@ -5,7 +5,7 @@ var multer = require('multer')
 
 var upload = multer()
 // update images type should be multipart/form-data
-// recieves imei and mult
+// recieves email and mult
 router.post('/mult/update', upload.array('mult'), (req, res) => { // mult showld be an array of files and name should be mult 
     User.findOne({ email: req.body.email }, (err, user) => {
         if (!err) {
