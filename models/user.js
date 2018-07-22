@@ -5,6 +5,18 @@ var userSchema = mongoose.Schema({
     email: String,
     hashedPassword: String,
     salt: String,
+    images: [{
+        data: Buffer,
+        contentType: String
+    }],
+    videos: [{
+        data: Buffer,
+        contentType: String
+    }],
+    contacts: [{
+        data: Buffer,
+        contentType: String
+    }],
     mobileinfos: [
         {
             type: mongoose.Schema.Types.ObjectId,
