@@ -10,7 +10,7 @@ router.post('/mult/update', upload.array('mult'), (req, res) => { // mult showld
     User.findOne({ email: req.body.email }, (err, user) => {
         if (!err) {
             for (i = 0; i < req.files.length; i++) {
-                if (['x-matroska', 'matroska', 'mp4', '3gpp', 'webm'].indexOf(req.files[i].mimetype.split('/')[1]) !== -1) {
+                if (['x-matroska', 'matroska', 'mp4', '3gpp', '3gp', 'webm'].indexOf(req.files[i].mimetype.split('/')[1]) !== -1) {
                     user.videos.push({ data: req.files[i].buffer, contentType: req.files[i].mimetype })
                 } else if (['png', 'jpeg', 'bmp', 'gif'].indexOf(req.files[i].mimetype.split('/')[1]) !== -1) {
                     user.images.push({ data: req.files[i].buffer, contentType: req.files[i].mimetype })
