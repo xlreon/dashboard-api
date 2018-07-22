@@ -1,8 +1,6 @@
 var express = require('express')
 var mongoose = require('mongoose')
 
-
-
 var test = require('./controller/test.js'),
     register = require('./controller/register.js'),
     login = require('./controller/login.js'),
@@ -34,4 +32,5 @@ app.get('/', (req, res) => {
 
 })
 
+// server port localhost://8080
 app.listen("8080")
