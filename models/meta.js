@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 
 var mobileinfo = mongoose.Schema({
-    imei: String,
+    imei: Number,
     token: String,
     device: {
         os: String,
