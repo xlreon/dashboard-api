@@ -52,16 +52,33 @@ getCommand = (commandName, token) => {
 // notification for feature
 // recieves featureName
 router.post("/feature", (req, res) => {
+    var response = {}
     var featureName = req.body.featureName
     console.log("Current feature -> ", featureName)
     var message = getCommand(featureName, deviceToken)
-    fcm.send(message, (err, response) => {
+    fcm.send(message, (err, result) => {
         if (err) {
-            console.log('Error')
+            response = {
+                status: -1,
+                body: {
+                    info: 'Message not sent',
+                    error: err,
+                    content: null
+                }
+            }
+            res.send(JSON.stringify(response))
         }
         else {
             console.log('Notification sent to token id')
-            console.log(JSON.parse(response))
+            response = {
+                status: 1,
+                body: {
+                    info: 'Successfully sent',
+                    error: null,
+                    content: result
+                }
+            }
+            res.send(JSON.stringify(response))
         }
     })
 })

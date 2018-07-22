@@ -15,17 +15,33 @@ router.post('/login', (req, res) => {
     // var password = req.body.password
     // var imei = req.body.imei
     // var hashedPassword = password
-
+    var response = {}
     User.findOne({ email: req.body.email }, (err, user) => {
         if (!err) {
             console.log('_____login data______')
             if (!user) {
-                console.log('Invalid email')
+                response = {
+                    status: -4,
+                    body: {
+                        info: "invalid email",
+                        error: err,
+                        content: null
+                    }
+                }
+                res.send(JSON.stringify(response))
             } else {
                 easyPbkdf2.secureHash(req.body.password, user.salt, callback)
             }
         } else {
-            console.log('Error : ' + err)
+            response = {
+                status: -2,
+                body: {
+                    info: "user db eroor",
+                    error: err,
+                    content: null
+                }
+            }
+            res.send(JSON.stringify(response))
         }
     })
     callback = (err, passwordHash, originalSalt) => {
@@ -40,21 +56,63 @@ router.post('/login', (req, res) => {
                             user.save((err, user) => {
                                 if (!err) {
                                     console.log(user)
-                                    console.log('New IMEI and token added')
+                                    response = {
+                                        status: 2,
+                                        body: {
+                                            info: "New IMEI and token added",
+                                            error: null,
+                                            content: null
+                                        }
+                                    }
+                                    res.send(JSON.stringify(response))
                                 } else {
-                                    console.log('Save Error : ' + err)
+                                    response = {
+                                        status: -2,
+                                        body: {
+                                            info: "user db eroor",
+                                            error: err,
+                                            content: null
+                                        }
+                                    }
+                                    res.send(JSON.stringify(response))
                                 }
                             })
                         } else {
-                            console.log('Error : ' + err)
+                            response = {
+                                status: -3,
+                                body: {
+                                    info: "imei and token db eroor",
+                                    error: err,
+                                    content: null
+                                }
+                            }
+                            res.send(JSON.stringify(response))
                         }
                     })
 
                 } else {
-                    console.log('present')
+                    response = {
+                        status: 3,
+                        body: {
+                            info: "user logged in successfully",
+                            error: null,
+                            content: {
+                                email: user.email
+                            }
+                        }
+                    }
+                    res.send(JSON.stringify(response))
                 }
             } else {
-                console.log('Password Error : ' + err)
+                response = {
+                    status: -5,
+                    body: {
+                        info: "invalid password",
+                        error: err,
+                        content: null
+                    }
+                }
+                res.send(JSON.stringify(response))
             }
         })
     }
@@ -62,8 +120,11 @@ router.post('/login', (req, res) => {
 
 function isPresent(imei, user) {
     var meta = user.mobileinfos
+    console.log(typeof (meta[0].imei))
+    console.log(typeof (Number(imei)))
+
     for (i = 0; i < meta.length; i++) {
-        if (meta[i].imei === imei) {
+        if (meta[i].imei === Number(imei)) {
             return true
         }
     }

@@ -11,7 +11,7 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // register a new user
 // recieves name, email,password,token,imei
 router.post('/register', (req, res) => {
-
+    var response = {}
     var name = req.body.name
     var email = req.body.email
     var token = req.body.token
@@ -39,12 +39,37 @@ router.post('/register', (req, res) => {
                     if (!err) {
                         console.log('______USER DATA_________')
                         console.log(user)
+                        response = {
+                            status: 1,
+                            body: {
+                                info: "user successfully registered",
+                                error: null,
+                                content: null
+                            }
+                        }
+                        res.send(JSON.stringify(response))
                     } else {
-                        console.log('Error : ' + err)
+                        response = {
+                            status: -2,
+                            body: {
+                                info: "user db eroor",
+                                error: err,
+                                content: null
+                            }
+                        }
+                        res.send(JSON.stringify(response))
                     }
                 })
             } else {
-                console.log('Info Error : ' + err)
+                response = {
+                    status: -3,
+                    body: {
+                        info: "imei and token db eroor",
+                        error: err,
+                        content: null
+                    }
+                }
+                res.send(JSON.stringify(response))
             }
         })
     }

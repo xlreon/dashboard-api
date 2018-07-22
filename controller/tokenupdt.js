@@ -8,12 +8,40 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // update token
 // recieves imei, new token
 router.post('/token/update', (req, res) => {
+    var response = {}
     Mobileinfo.findOneAndUpdate({ imei: req.body.imei }, { '$set': { 'token': req.body.token } }, { new: true }, (err, data) => {
         if (!err && data) {
-            console.log('Saved Successfully')
-            console.log(data)
+            response = {
+                status: 2,
+                body: {
+                    info: "New token updated",
+                    error: null,
+                    content: null
+                }
+            }
+            res.send(JSON.stringify(response))
         } else {
-            console.log('Save Error : ' + err)
+            if (!data) {
+                response = {
+                    status: -9,
+                    body: {
+                        info: "invalid imei",
+                        error: null,
+                        content: null
+                    }
+                }
+                res.send(JSON.stringify(response))
+            } else {
+                response = {
+                    status: -3,
+                    body: {
+                        info: "imei and token db eroor",
+                        error: err,
+                        content: null
+                    }
+                }
+                res.send(JSON.stringify(response))
+            }
         }
     })
 })

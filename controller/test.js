@@ -10,7 +10,7 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // testing to send notification
 // recieves query as token
 router.get("/test", (req, res) => {
-
+    var response = {}
     console.log(req.query.token)
 
     var message = {
@@ -19,16 +19,33 @@ router.get("/test", (req, res) => {
             title: "Test",
             body: "Test"
         }
-
     }
 
-    fcm.send(message, (err, response) => {
+    fcm.send(message, (err, result) => {
         if (err) {
-            console.log('Error')
+            console.log('Error : ' + err)
+            response = {
+                status: -1,
+                body: {
+                    info: 'Message not sent',
+                    error: err,
+                    content: null
+                }
+            }
+            res.send(JSON.stringify(response))
         }
         else {
             console.log('Notidication sent to token id')
-            console.log(JSON.parse(response).results)
+            response = {
+                status: 1,
+                body: {
+                    info: 'Successfully sent',
+                    error: null,
+                    content: result
+                }
+            }
+            res.send(JSON.stringify(response))
+            console.log(JSON.parse(result).reults)
         }
     })
 })
