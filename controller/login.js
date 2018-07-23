@@ -120,8 +120,6 @@ router.post('/login', (req, res) => {
 
 function isPresent(imei, user) {
     var meta = user.mobileinfos
-    console.log(typeof (meta[0].imei))
-    console.log(typeof (Number(imei)))
 
     for (i = 0; i < meta.length; i++) {
         if (meta[i].imei === Number(imei)) {

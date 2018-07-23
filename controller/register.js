@@ -12,20 +12,11 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // recieves name, email,password,token,imei
 router.post('/register', (req, res) => {
     var response = {}
-    var name = req.body.name
-    var email = req.body.email
-    var token = req.body.token
-    var password = req.body.password
-    var imei = req.body.imei
-    var hashedPassword = password
+    var hashedPassword = req.body.password
 
     callback = (err, passwordHash, originalSalt) => {
         hashedPassword = passwordHash
-        // console.log(name + "\n")
-        // console.log(email + "\n")
-        // console.log(token + "\n")
-        // console.log(imei + "\n")
-        // console.log(hashedPassword + "\n")
+
         Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
             if (!err) {
                 var newUser = {
