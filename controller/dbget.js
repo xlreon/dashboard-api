@@ -4,23 +4,25 @@ var User = require('../models/user')
 var bodyParser = require("body-parser")
 
 router.use(bodyParser.urlencoded({ extended: true }))
-
+// gets the list of specific type file from db
 // recieves email and type (images,videos,contacts)
-router.post('/mult/get', (req, res) => {
+router.post('/file/db/get', (req, res) => {
     var response = {}
+    var data_file = []
     User.findOne({ email: req.body.email }, (err, user) => {
         if (!err && user) {
-            temp = user[req.body.type]
-            if (temp) {
+            for (i = 0; i < user.files.length; i++) {
+                if (user.files[i].key === req.body.type) {
+                    data_file.push(user.files[i])
+                }
+            }
+            if (data_file.length != 0) {
                 response = {
                     status: 5,
                     body: {
-                        info: "user data found successfully",
+                        info: "user data found successfully in db",
                         error: null,
-                        content: {
-                            data: temp,
-                            type: req.body.type
-                        }
+                        content: data_file
                     }
                 }
                 res.send(response)
@@ -28,12 +30,9 @@ router.post('/mult/get', (req, res) => {
                 response = {
                     status: -8,
                     body: {
-                        info: "user data empty",
+                        info: "user data empty or invalid file type",
                         error: null,
-                        content: {
-                            data: null,
-                            type: req.body.type
-                        }
+                        content: null
                     }
                 }
                 res.send(response)
