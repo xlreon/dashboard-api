@@ -16,7 +16,6 @@ var s3 = new AWS.S3()
 router.post('/file/get', (req, res) => {
     s3.getObject({ Bucket: bucketName, Key: `${req.body.key}/${req.body.name}` }, (err, file) => {
         if (!err) {
-            console.log(file)
             response = {
                 status: 8,
                 body: {
