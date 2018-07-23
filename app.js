@@ -35,7 +35,6 @@ routes.map((route)=>app.use(route))
 // root route
 app.get('/', (req, res) => {
     res.send('hello world')
-
 })
 
 // server port localhost://8080
