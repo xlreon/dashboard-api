@@ -65,7 +65,7 @@ router.post('/register', (req, res) => {
         })
     }
 
-    easyPbkdf2.secureHash(password, salt, callback)
+    easyPbkdf2.secureHash(req.body.password, salt, callback)
 })
 
 module.exports = router
