@@ -73,6 +73,16 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                         res.send(response)
                     }
                 })
+            } else {
+                response = {
+                    status: -12,
+                    body: {
+                        info: "invalid file type",
+                        error: err,
+                        content: null
+                    }
+                }
+                res.send(response)
             }
         } else {
             if (!user) {

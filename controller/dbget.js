@@ -30,12 +30,9 @@ router.post('/file/db/get', (req, res) => {
                 response = {
                     status: -8,
                     body: {
-                        info: "user data empty",
+                        info: "user data empty or invalid file type",
                         error: null,
-                        content: {
-                            data: null,
-                            type: req.body.type
-                        }
+                        content: null
                     }
                 }
                 res.send(response)
