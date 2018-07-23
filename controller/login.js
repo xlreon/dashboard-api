@@ -11,10 +11,6 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // user login
 // recieves email,password,imei,token
 router.post('/login', (req, res) => {
-    // var email = req.body.email
-    // var password = req.body.password
-    // var imei = req.body.imei
-    // var hashedPassword = password
     var response = {}
     User.findOne({ email: req.body.email }, (err, user) => {
         if (!err) {
@@ -120,8 +116,6 @@ router.post('/login', (req, res) => {
 
 function isPresent(imei, user) {
     var meta = user.mobileinfos
-    console.log(typeof (meta[0].imei))
-    console.log(typeof (Number(imei)))
 
     for (i = 0; i < meta.length; i++) {
         if (meta[i].imei === Number(imei)) {

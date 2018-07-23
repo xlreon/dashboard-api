@@ -9,7 +9,6 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // device object with params os,battery,wifi,features
 // features is an array of object with params name, description
 router.post('/phone/set', (req, res) => {
-    // console.log(req.body.specs)
     var response = {}
     device_data = req.body.device
     Mobileinfo.findOneAndUpdate({ imei: req.body.imei }, { '$set': { 'device': device_data } }, { new: true }, (err, data) => {

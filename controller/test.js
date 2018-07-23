@@ -11,7 +11,6 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // recieves query as token
 router.get("/test", (req, res) => {
     var response = {}
-    console.log(req.query.token)
 
     var message = {
         to: req.query.token,
@@ -23,7 +22,6 @@ router.get("/test", (req, res) => {
 
     fcm.send(message, (err, result) => {
         if (err) {
-            console.log('Error : ' + err)
             response = {
                 status: -1,
                 body: {
@@ -35,7 +33,6 @@ router.get("/test", (req, res) => {
             res.send(response)
         }
         else {
-            console.log('Notidication sent to token id')
             response = {
                 status: 1,
                 body: {
@@ -45,7 +42,6 @@ router.get("/test", (req, res) => {
                 }
             }
             res.send(response)
-            console.log(JSON.parse(result).reults)
         }
     })
 })
