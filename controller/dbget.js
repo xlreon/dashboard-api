@@ -2,11 +2,12 @@ var express = require('express')
 var router = express.Router()
 var User = require('../models/user')
 var bodyParser = require("body-parser")
+var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 // gets the list of specific type file from db
 // recieves email and type (images,videos,contacts)
-router.post('/file/db/get', (req, res) => {
+router.post('/file/db/get', checkparams, (req, res) => {
     var response = {}
     var data_file = []
     User.findOne({ email: req.body.email }, (err, user) => {

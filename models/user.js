@@ -3,6 +3,7 @@ var mongoose = require('mongoose')
 var userSchema = mongoose.Schema({
     name: String,
     email: String,
+    e_no: Number,
     hashedPassword: String,
     salt: String,
     files: [{

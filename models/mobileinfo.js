@@ -6,8 +6,7 @@ var mobileinfo = mongoose.Schema({
     device: {
         os: String,
         battery: Number,
-        wifi: String,
-        features: [{ name: String, description: String }]
+        wifi: String
     }
 })
 
