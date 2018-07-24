@@ -16,7 +16,7 @@ var s3 = new AWS.S3()
 // recieves key (of db file) and name (of db file)
 router.post('/file/get', checkparams, (req, res) => {
     s3.getObject({ Bucket: bucketName, Key: `${req.body.key}/${req.body.name}` }, (err, file) => {
-        if (!err) {
+        if (!err && file) {
             response = {
                 status: 8,
                 body: {
@@ -27,15 +27,27 @@ router.post('/file/get', checkparams, (req, res) => {
             }
             res.send(response)
         } else {
-            response = {
-                status: -11,
-                body: {
-                    info: "aws s3 error",
-                    error: err,
-                    content: null
+            if (!file) {
+                response = {
+                    status: -14,
+                    body: {
+                        info: "aws s3 file not found",
+                        error: null,
+                        content: null
+                    }
                 }
+                res.send(response)
+            } else {
+                response = {
+                    status: -11,
+                    body: {
+                        info: "aws s3 error",
+                        error: err,
+                        content: null
+                    }
+                }
+                res.send(response)
             }
-            res.send(response)
         }
     })
 })
