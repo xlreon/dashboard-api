@@ -20,9 +20,13 @@ function checkparams(req, res, next) { //req.route.path
             break
         case '/phone/set':
             if (!req.body.imei) { missing.push('imei') }
-            if (!req.body.device.os) { missing.push('device[os]') }
-            if (!req.body.device.battery) { missing.push('device[battery]') }
-            if (!req.body.device.wifi) { missing.push('device[wifi]') }
+            if (!req.body.device) {
+                missing.push('device')
+            } else {
+                if (!req.body.device.os) { missing.push('device[os]') }
+                if (!req.body.device.battery) { missing.push('device[battery]') }
+                if (!req.body.device.wifi) { missing.push('device[wifi]') }
+            }
             break
         case '/file/get':
             if (!req.body.key) { missing.push('key') }
