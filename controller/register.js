@@ -9,7 +9,7 @@ var bodyParser = require("body-parser")
 router.use(bodyParser.urlencoded({ extended: true }))
 
 // register a new user
-// recieves name, email,phnumber,ccode(countrycode),password,token,imei
+// recieves name, email,e_no(phone number),password,token,imei
 router.post('/register', (req, res) => {
     var response = {}
     var hashedPassword = req.body.password
@@ -35,8 +35,7 @@ router.post('/register', (req, res) => {
                             var newUser = {
                                 name: req.body.name,
                                 email: req.body.email,
-                                phnumber: req.body.phnumber,
-                                ccode: req.body.ccode,
+                                e_no: req.body.e_no,
                                 hashedPassword: hashedPassword,
                                 salt: salt,
                                 mobileinfos: meta
