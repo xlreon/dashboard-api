@@ -5,6 +5,7 @@ var FCM = require('fcm-node')
 var fcm = new FCM(serverKey)
 var bodyParser = require("body-parser")
 var deviceToken = require('../keys/token.json')
+var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
@@ -51,7 +52,7 @@ getCommand = (commandName, token) => {
 
 // notification for feature
 // recieves featureName
-router.post("/feature", (req, res) => {
+router.post("/feature", checkparams, (req, res) => {
     var response = {}
     var featureName = req.body.featureName
     console.log("Current feature -> ", featureName)

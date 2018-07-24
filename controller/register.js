@@ -5,12 +5,13 @@ var Mobileinfo = require('../models/mobileinfo')
 var easyPbkdf2 = require("easy-pbkdf2")()
 var salt = easyPbkdf2.generateSalt();
 var bodyParser = require("body-parser")
+var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
 // register a new user
 // recieves name, email,e_no(phone number),password,token,imei
-router.post('/register', (req, res) => {
+router.post('/register', checkparams, (req, res) => {
     var response = {}
     var hashedPassword = req.body.password
 

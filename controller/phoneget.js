@@ -2,16 +2,14 @@ var express = require('express')
 var router = express.Router();
 var Mobileinfo = require('../models/mobileinfo')
 var bodyParser = require("body-parser")
+var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 // get device details
 // recieves imei 
-router.post('/phone/get', (req, res) => {
+router.post('/phone/get', checkparams, (req, res) => {
     var response = {}
     Mobileinfo.findOne({ imei: req.body.imei }, (err, data) => {
-        console.log(typeof (data.device))
-        console.log(data.device.os && data.device.battery && data.device.wifi)
-
         if (!err && data) {
             if (data.device.os && data.device.battery && data.device.wifi) {
                 response = {

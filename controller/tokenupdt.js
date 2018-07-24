@@ -2,12 +2,13 @@ var express = require('express')
 var router = express.Router()
 var Mobileinfo = require('../models/mobileinfo')
 var bodyParser = require("body-parser")
+var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
 // update token
 // recieves imei, new token
-router.post('/token/update', (req, res) => {
+router.post('/token/update', checkparams, (req, res) => {
     var response = {}
     Mobileinfo.findOneAndUpdate({ imei: req.body.imei }, { '$set': { 'token': req.body.token } }, { new: true }, (err, data) => {
         if (!err && data) {

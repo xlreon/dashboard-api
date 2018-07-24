@@ -2,12 +2,13 @@ var express = require('express')
 var router = express.Router();
 var Mobileinfo = require('../models/mobileinfo')
 var bodyParser = require("body-parser")
+var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 // set device details
 // recieves imei and 
 // device object with params os,battery,wifi
-router.post('/phone/set', (req, res) => {
+router.post('/phone/set', checkparams, (req, res) => {
     var response = {}
     device_data = req.body.device
     Mobileinfo.findOneAndUpdate({ imei: req.body.imei }, { '$set': { 'device': device_data } }, { new: true }, (err, data) => {

@@ -5,12 +5,13 @@ var Mobileinfo = require('../models/mobileinfo')
 var easyPbkdf2 = require("easy-pbkdf2")()
 var salt = easyPbkdf2.generateSalt();
 var bodyParser = require("body-parser")
+var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
 // user login
 // recieves email,password,imei,token
-router.post('/login', (req, res) => {
+router.post('/login', checkparams, (req, res) => {
     // var email = req.body.email
     // var password = req.body.password
     // var imei = req.body.imei
