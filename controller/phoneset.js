@@ -6,8 +6,7 @@ var bodyParser = require("body-parser")
 router.use(bodyParser.urlencoded({ extended: true }))
 // set device details
 // recieves imei and 
-// device object with params os,battery,wifi,features
-// features is an array of object with params name, description
+// device object with params os,battery,wifi
 router.post('/phone/set', (req, res) => {
     var response = {}
     device_data = req.body.device
