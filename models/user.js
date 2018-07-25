@@ -6,11 +6,6 @@ var userSchema = mongoose.Schema({
     e_no: Number,
     hashedPassword: String,
     salt: String,
-    files: [{
-        key: String,
-        name: String,
-        location: String
-    }],
     mobileinfos: [
         {
             type: mongoose.Schema.Types.ObjectId,
