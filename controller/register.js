@@ -57,12 +57,17 @@ router.post('/register', checkparams, (req, res) => {
                                     if (!err) {
                                         console.log('______USER DATA_________')
                                         console.log(user)
+                                        var context = {
+                                            link: "localhost:8080/" + user.tmpsalt
+                                        }
+
+
                                         var mailOptions = {
                                             from: 'uniqtest123@gmail.com',
                                             to: req.body.email,
                                             subject: 'Verification of email',
                                             text: 'please verify your email',
-                                            html: `<a>localhost:8080/${user.tmpsalt}</a>`
+                                            html: `<h1>localhost:8080/${user.tmpsalt}</h1> <br> <h2>Copy the above link and open in new tab to verify</h2>`
                                         };
 
                                         transporter.sendMail(mailOptions, function (err, info) {
