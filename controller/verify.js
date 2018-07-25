@@ -6,7 +6,7 @@ router.get('/:id', (req, res) => {
     var response = {}
     User.findOneAndUpdate({ tmpsalt: req.params.id }, { $set: { 'verified': true } }, (err, user) => {
         if (!err && user) {
-            res.send(`<p>Your Email Has Been Verified</p>`)
+            res.send('Your Email Has Been Verified : ' + user.email)
         } else {
             if (!user) {
                 response = {
