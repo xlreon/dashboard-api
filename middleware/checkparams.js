@@ -47,6 +47,9 @@ function checkparams(req, res, next) { //req.route.path
             if (!req.body.imei) { missing.push('imei') }
             if (!req.body.token) { missing.push('token') }
             break
+        case '/imei/get':
+            if (!req.body.email) { missing.push('email') }
+            break
         default: break
     }
 
