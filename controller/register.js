@@ -20,80 +20,15 @@ router.post('/register', checkparams, (req, res) => {
 
         User.findOne({ email: req.body.email }, (err, userext) => {
             if (!err && userext) {
-                // response = {
-                //     status: 9,
-                //     body: {
-                //         info: "user exists",
-                //         error: null,
-                //         content: null
-                //     }
-                // }
-                // res.send(response)
-                Mobileinfo.findOne({ imei: req.body.imei }, (err, dataext) => {
-                    if (!err && dataext) {
-                        response = {
-                            status: 9,
-                            body: {
-                                info: "user exists",
-                                error: null,
-                                content: null
-                            }
-                        }
-                        res.send(response)
-                    } else {
-                        if (!dataext) {
-                            Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
-                                if (!err) {
-                                    userext.mobileinfos.push(meta)
-                                    userext.save((err, userext) => {
-                                        if (!err) {
-                                            console.log(userext)
-                                            response = {
-                                                status: 2,
-                                                body: {
-                                                    info: "New IMEI and token added",
-                                                    error: null,
-                                                    content: null
-                                                }
-                                            }
-                                            res.send(response)
-                                        } else {
-                                            response = {
-                                                status: -2,
-                                                body: {
-                                                    info: "user db eroor",
-                                                    error: err,
-                                                    content: null
-                                                }
-                                            }
-                                            res.send(response)
-                                        }
-                                    })
-                                } else {
-                                    response = {
-                                        status: -3,
-                                        body: {
-                                            info: "imei and token db eroor",
-                                            error: err,
-                                            content: null
-                                        }
-                                    }
-                                    res.send(response)
-                                }
-                            })
-                        } else {
-                            response = {
-                                status: -3,
-                                body: {
-                                    info: "imei and token db eroor",
-                                    error: err,
-                                    content: null
-                                }
-                            }
-                            res.send(response)
-                        }
+                response = {
+                    status: 9,
+                    body: {
+                        info: "user exists",
+                        error: null,
+                        content: null
                     }
-                })
+                }
+                res.send(response)
             } else {
                 if (!userext) {
                     Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
