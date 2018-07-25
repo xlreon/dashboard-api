@@ -1,20 +1,20 @@
 var express = require('express')
 var router = express.Router()
-var User = require('../models/user')
+var Mobileinfo = require('../models/mobileinfo')
 var bodyParser = require("body-parser")
 var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 // gets the list of specific type file from db
-// recieves email and type (images,videos,contacts)
+// recieves imei and type (images,videos,contacts)
 router.post('/file/db/get', checkparams, (req, res) => {
     var response = {}
     var data_file = []
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (!err && user) {
-            for (i = 0; i < user.files.length; i++) {
-                if (user.files[i].key === req.body.type) {
-                    data_file.push(user.files[i])
+    Mobileinfo.findOne({ imei: req.body.imei }, (err, mobileinfo) => {
+        if (!err && mobileinfo) {
+            for (i = 0; i < mobileinfo.files.length; i++) {
+                if (mobileinfo.files[i].key === req.body.type) {
+                    data_file.push(mobileinfo.files[i])
                 }
             }
             if (data_file.length != 0) {
@@ -39,11 +39,11 @@ router.post('/file/db/get', checkparams, (req, res) => {
                 res.send(response)
             }
         } else {
-            if (!user) {
+            if (!mobileinfo) {
                 response = {
-                    status: -4,
+                    status: -15,
                     body: {
-                        info: "invalid email",
+                        info: "invalid imei",
                         error: err,
                         content: null
                     }
@@ -51,9 +51,9 @@ router.post('/file/db/get', checkparams, (req, res) => {
                 res.send(response)
             } else {
                 response = {
-                    status: -2,
+                    status: -3,
                     body: {
-                        info: "user db eroor",
+                        info: "imei and token db eroor",
                         error: err,
                         content: null
                     }

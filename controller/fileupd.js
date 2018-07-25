@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router();
-var User = require('../models/user')
+var Mobileinfo = require('../models/mobileinfo')
 var multer = require('multer')
 var AWS = require('aws-sdk')
 var upload = multer()
@@ -12,12 +12,12 @@ var bucketName = require('../keys/bucketName.json')
 AWS.config.update(aws_access)
 var s3 = new AWS.S3()
 // update images type should be multipart/form-data
-// recieves email and mult
+// recieves imei and mult
 router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showld be a file and name should be mult 
     var response = {}
     var missing = []
-    if (!req.body.email) {
-        missing.push('email')
+    if (!req.body.imei) {
+        missing.push('imei')
     }
     if (!req.file) {
         missing.push('file')
@@ -36,13 +36,13 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
     } else {
 
         var file, key, data_file
-        User.findOne({ email: req.body.email }, (err, user) => {
-            if (!err && user) {
+        Mobileinfo.findOne({ imei: req.body.imei }, (err, mobileinfo) => {
+            if (!err && mobileinfo) {
                 console.log(req.file)
                 console.log('\n\n\n')
 
                 if (isValideFile(req.file.mimetype)) {
-                    key = `${req.file.mimetype.split('/')[0]}/${Date.now().toString()}-${req.file.originalname}`
+                    key = `${Date.now().toString()}-${req.file.originalname}`
                     file = {
                         Bucket: bucketName,
                         Body: req.file.buffer,
@@ -51,9 +51,9 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                     }
                     s3.upload(file, (err, data) => {
                         if (!err) {
-                            data_file = { key: data.Key.split('/')[0], name: data.Key.split('/')[1], location: data.Location }
-                            user.files.push(data_file)
-                            user.save((err, user) => {
+                            data_file = { key: req.file.mimetype.split('/')[0], name: data.Key }
+                            mobileinfo.files.push(data_file)
+                            mobileinfo.save((err, mobileinfo) => {
                                 if (!err) {
                                     response = {
                                         status: 7,
@@ -62,17 +62,16 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                                             error: null,
                                             content: {
                                                 key: data_file.key,
-                                                name: data_file.name,
-                                                location: data_file.location
+                                                name: data_file.name
                                             }
                                         }
                                     }
                                     res.send(response)
                                 } else {
                                     response = {
-                                        status: -2,
+                                        status: -3,
                                         body: {
-                                            info: "user db eroor",
+                                            info: "imei and token db eroor",
                                             error: err,
                                             content: null
                                         }
@@ -105,11 +104,11 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                     res.send(response)
                 }
             } else {
-                if (!user) {
+                if (!mobileinfo) {
                     response = {
-                        status: -4,
+                        status: -15,
                         body: {
-                            info: "invalid email",
+                            info: "invalid imei",
                             error: err,
                             content: null
                         }
@@ -117,9 +116,9 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                     res.send(response)
                 } else {
                     response = {
-                        status: -2,
+                        status: -3,
                         body: {
-                            info: "user db eroor",
+                            info: "imei and token db eroor",
                             error: err,
                             content: null
                         }
@@ -133,9 +132,7 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
 
 function isValideFile(file_type) {
 
-    if (['x-matroska', 'matroska', 'mp4', '3gpp', '3gp', 'webm'].indexOf(file_type.split('/')[1]) !== -1
-        || ['png', 'jpeg', 'bmp', 'gif'].indexOf(file_type.split('/')[1]) !== -1
-        || ['x-vcard'].indexOf(file_type.split('/')[1]) !== -1) {
+    if (['x-matroska', 'matroska', 'mp4', '3gpp', '3gp', 'webm', 'png', 'jpeg', 'bmp', 'gif', 'x-vcard', 'vnd.ms-excel'].indexOf(file_type.split('/')[1]) !== -1) {
         return true
     } else {
         return false

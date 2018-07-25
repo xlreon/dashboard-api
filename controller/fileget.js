@@ -13,9 +13,9 @@ var bucketName = require('../keys/bucketName.json')
 AWS.config.update(aws_access)
 var s3 = new AWS.S3()
 // downloads data from aws cloud
-// recieves key (of db file) and name (of db file)
+// recieves name (of db file)
 router.post('/file/get', checkparams, (req, res) => {
-    s3.getObject({ Bucket: bucketName, Key: `${req.body.key}/${req.body.name}` }, (err, file) => {
+    s3.getObject({ Bucket: bucketName, Key: `${req.body.name}` }, (err, file) => {
         if (!err && file) {
             response = {
                 status: 8,
