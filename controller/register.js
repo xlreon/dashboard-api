@@ -4,10 +4,20 @@ var User = require('../models/user')
 var Mobileinfo = require('../models/mobileinfo')
 var easyPbkdf2 = require("easy-pbkdf2")()
 var salt = easyPbkdf2.generateSalt();
+var tmpsalt = easyPbkdf2.generateSalt()
 var bodyParser = require("body-parser")
+var nodemailer = require('nodemailer')
 var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'uniqtest123@gmail.com',
+        pass: 'testmeuniq'
+    }
+});
 
 // register a new user
 // recieves name, email,e_no(phone number),password,token,imei
@@ -40,12 +50,36 @@ router.post('/register', checkparams, (req, res) => {
                                     e_no: req.body.e_no,
                                     hashedPassword: hashedPassword,
                                     salt: salt,
+                                    tmpsalt: tmpsalt,
                                     mobileinfos: meta
                                 }
                                 User.create(newUser, (err, user) => {
                                     if (!err) {
                                         console.log('______USER DATA_________')
                                         console.log(user)
+                                        var mailOptions = {
+                                            from: 'uniqtest123@gmail.com',
+                                            to: req.body.email,
+                                            subject: 'Verification of email',
+                                            text: 'please verify your email',
+                                            html: `<a>localhost:8080/${user.tmpsalt}</a>`
+                                        };
+
+                                        transporter.sendMail(mailOptions, function (err, info) {
+                                            if (error) {
+                                                response = {
+                                                    status: -17,
+                                                    body: {
+                                                        info: "nodemailer smtp error",
+                                                        error: err,
+                                                        content: null
+                                                    }
+                                                }
+                                                res.send(response)
+                                            } else {
+                                                console.log('Email sent: ' + info.response);
+                                            }
+                                        });
                                         response = {
                                             status: 1,
                                             body: {
