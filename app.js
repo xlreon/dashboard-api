@@ -12,7 +12,8 @@ var test = require('./controller/test.js'),
     tokenupdt = require('./controller/tokenupdt.js'),
     phoneset = require('./controller/phoneset.js'),
     phoneget = require('./controller/phoneget.js'),
-    imeiget = require('./controller/imeiget.js')
+    imeiget = require('./controller/imeiget.js'),
+    passupd = require('./controller/passupd.js')
 
 var app = express()
 
@@ -30,7 +31,8 @@ routes = [
     tokenupdt,
     phoneset,
     phoneget,
-    imeiget
+    imeiget,
+    passupd
 ]
 
 // use routers
