@@ -1,5 +1,6 @@
 var express = require('express')
 var mongoose = require('mongoose')
+var cors = require('cors');
 
 var test = require('./controller/test.js'),
     register = require('./controller/register.js'),
@@ -34,6 +35,8 @@ routes = [
     imeiget,
     passupd
 ]
+
+app.use(cors({origin: 'http://localhost:3000'}));
 
 // use routers
 routes.map((route) => app.use(route))
