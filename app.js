@@ -14,7 +14,8 @@ var test = require('./controller/test.js'),
     phoneset = require('./controller/phoneset.js'),
     phoneget = require('./controller/phoneget.js'),
     imeiget = require('./controller/imeiget.js'),
-    passupd = require('./controller/passupd.js')
+    passupd = require('./controller/passupd.js'),
+    verify = require('./controller/verify.js')
 
 var app = express()
 
@@ -33,10 +34,11 @@ routes = [
     phoneset,
     phoneget,
     imeiget,
-    passupd
+    passupd,
+    verify
 ]
 
-app.use(cors({origin: 'http://localhost:3000'}));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // use routers
 routes.map((route) => app.use(route))
