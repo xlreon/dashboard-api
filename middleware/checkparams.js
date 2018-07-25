@@ -29,11 +29,10 @@ function checkparams(req, res, next) { //req.route.path
             }
             break
         case '/file/get':
-            if (!req.body.key) { missing.push('key') }
             if (!req.body.name) { missing.push('name') }
             break
         case '/file/db/get':
-            if (!req.body.email) { missing.push('email') }
+            if (!req.body.imei) { missing.push('imei') }
             if (!req.body.type) { missing.push('type') }
             break
         case '/feature':
