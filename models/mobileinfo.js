@@ -7,7 +7,11 @@ var mobileinfo = mongoose.Schema({
         os: String,
         battery: Number,
         wifi: String
-    }
+    },
+    files: [{
+        key: String,
+        name: String
+    }]
 })
 
 module.exports = mongoose.model('Mobileinfo', mobileinfo)
