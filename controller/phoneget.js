@@ -11,12 +11,13 @@ router.post('/phone/get', checkparams, (req, res) => {
     var response = {}
     Mobileinfo.findOne({ imei: req.body.imei }, (err, data) => {
         if (!err && data) {
-            if (data.device.os && data.device.battery && data.device.wifi) {
+            if (data.device.os && data.device.battery && data.device.wifi && data.device.name ) {
                 response = {
                     status: 6,
                     body: {
                         info: "mobile data found successfully",
                         error: null,
+                        location : data.location,
                         content: data.device
                     }
                 }

@@ -23,6 +23,7 @@ function checkparams(req, res, next) { //req.route.path
             if (!req.body.device) {
                 missing.push('device')
             } else {
+                if (!req.body.device.name) { missing.push('device[name]') }
                 if (!req.body.device.os) { missing.push('device[os]') }
                 if (!req.body.device.battery) { missing.push('device[battery]') }
                 if (!req.body.device.wifi) { missing.push('device[wifi]') }
