@@ -50,53 +50,67 @@ router.post('/login', checkparams, (req, res) => {
             User.findOne({ hashedPassword: passwordHash }).populate('mobileinfos').exec(function (err, user) {
                 if (!err && user) {
                     console.log(user)
-                    if (!isPresent(req.body.imei, user)) {
-                        console.log('Not present')
-                        Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
-                            if (!err) {
-                                user.mobileinfos.push(meta)
-                                user.save((err, user) => {
-                                    if (!err) {
-                                        console.log(user)
-                                        response = {
-                                            status: 2,
-                                            body: {
-                                                info: "New IMEI and token added",
-                                                error: null,
-                                                content: null
+                    if (user.verified) {
+                        if (!isPresent(req.body.imei, user)) {
+                            console.log('Not present')
+                            Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
+                                if (!err) {
+                                    user.mobileinfos.push(meta)
+                                    user.save((err, user) => {
+                                        if (!err) {
+                                            console.log(user)
+                                            response = {
+                                                status: 2,
+                                                body: {
+                                                    info: "New IMEI and token added",
+                                                    error: null,
+                                                    content: null
+                                                }
                                             }
-                                        }
-                                        res.send(response)
-                                    } else {
-                                        response = {
-                                            status: -2,
-                                            body: {
-                                                info: "user db eroor",
-                                                error: err,
-                                                content: null
+                                            res.send(response)
+                                        } else {
+                                            response = {
+                                                status: -2,
+                                                body: {
+                                                    info: "user db eroor",
+                                                    error: err,
+                                                    content: null
+                                                }
                                             }
+                                            res.send(response)
                                         }
-                                        res.send(response)
+                                    })
+                                } else {
+                                    response = {
+                                        status: -3,
+                                        body: {
+                                            info: "imei and token db eroor",
+                                            error: err,
+                                            content: null
+                                        }
                                     }
-                                })
-                            } else {
-                                response = {
-                                    status: -3,
-                                    body: {
-                                        info: "imei and token db eroor",
-                                        error: err,
-                                        content: null
+                                    res.send(response)
+                                }
+                            })
+
+                        } else {
+                            response = {
+                                status: 3,
+                                body: {
+                                    info: "user logged in successfully",
+                                    error: null,
+                                    content: {
+                                        email: user.email
                                     }
                                 }
-                                res.send(response)
                             }
-                        })
-
+                            res.send(response)
+                        }
                     } else {
                         response = {
-                            status: 3,
+                            status: -19,
                             body: {
-                                info: "user logged in successfully",
+                                info: "user not verified",
                                 error: null,
                                 content: {
                                     email: user.email
