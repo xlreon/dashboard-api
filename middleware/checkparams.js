@@ -50,6 +50,10 @@ function checkparams(req, res, next) { //req.route.path
         case '/imei/get':
             if (!req.body.email) { missing.push('email') }
             break
+        case '/password/update':
+            if (!req.body.email) { missing.push('email') }
+            if (!req.body.password) { missing.push('password') }
+            break
         default: break
     }
 
