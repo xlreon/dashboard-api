@@ -97,7 +97,7 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                         status: -12,
                         body: {
                             info: "invalid file type",
-                            error: err,
+                            error: null,
                             content: null
                         }
                     }
@@ -109,7 +109,7 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                         status: -15,
                         body: {
                             info: "invalid imei",
-                            error: err,
+                            error: null,
                             content: null
                         }
                     }

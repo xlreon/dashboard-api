@@ -44,7 +44,7 @@ router.post('/file/db/get', checkparams, (req, res) => {
                     status: -15,
                     body: {
                         info: "invalid imei",
-                        error: err,
+                        error: null,
                         content: null
                     }
                 }
