@@ -17,7 +17,7 @@ var test = require('./controller/test.js'),
 
 var app = express()
 
-mongoose.connect('mongodb://localhost:27017/dashboard', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true })
 
 routes = [
     test,
