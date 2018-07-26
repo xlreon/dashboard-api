@@ -5,17 +5,20 @@ var Mobileinfo = require('../models/mobileinfo')
 var easyPbkdf2 = require("easy-pbkdf2")()
 var salt = easyPbkdf2.generateSalt();
 var tmpsalt = easyPbkdf2.generateSalt()
+var mail = require('../keys/mail.json')
 var bodyParser = require("body-parser")
 var nodemailer = require('nodemailer')
 var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
+console.log(mail)
+
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'uniqtest123@gmail.com',
-        pass: 'testmeuniq'
+        user: mail.email,
+        pass: mail.password
     }
 });
 
@@ -63,7 +66,7 @@ router.post('/register', checkparams, (req, res) => {
 
 
                                         var mailOptions = {
-                                            from: 'uniqtest123@gmail.com',
+                                            from: mail.email,
                                             to: req.body.email,
                                             subject: 'Verification of email',
                                             text: 'please verify your email',
@@ -71,7 +74,7 @@ router.post('/register', checkparams, (req, res) => {
                                         };
 
                                         transporter.sendMail(mailOptions, function (err, info) {
-                                            if (error) {
+                                            if (err) {
                                                 response = {
                                                     status: -17,
                                                     body: {
@@ -83,17 +86,17 @@ router.post('/register', checkparams, (req, res) => {
                                                 res.send(response)
                                             } else {
                                                 console.log('Email sent: ' + info.response);
+                                                response = {
+                                                    status: 1,
+                                                    body: {
+                                                        info: "user successfully registered",
+                                                        error: null,
+                                                        content: null
+                                                    }
+                                                }
+                                                res.send(response)
                                             }
                                         });
-                                        response = {
-                                            status: 1,
-                                            body: {
-                                                info: "user successfully registered",
-                                                error: null,
-                                                content: null
-                                            }
-                                        }
-                                        res.send(response)
                                     } else {
                                         response = {
                                             status: -2,
