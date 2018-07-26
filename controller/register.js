@@ -4,27 +4,16 @@ var User = require('../models/user')
 var Mobileinfo = require('../models/mobileinfo')
 var easyPbkdf2 = require("easy-pbkdf2")()
 var salt = easyPbkdf2.generateSalt();
-var tmpsalt = easyPbkdf2.generateSalt()
-var mail = require('../keys/mail.json')
 var bodyParser = require("body-parser")
-var nodemailer = require('nodemailer')
 var checkparams = require('../middleware/checkparams')
+var mailware = require('../middleware/mailware')
+var mail_sent = false
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
-console.log(mail)
-
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: mail.email,
-        pass: mail.password
-    }
-});
-
 // register a new user
 // recieves name, email,e_no(phone number),password,token,imei
-router.post('/register', checkparams, (req, res) => {
+router.post('/register', checkparams, mailware, (req, res) => {
     var response = {}
     var hashedPassword = req.body.password
 
@@ -53,50 +42,24 @@ router.post('/register', checkparams, (req, res) => {
                                     e_no: req.body.e_no,
                                     hashedPassword: hashedPassword,
                                     salt: salt,
-                                    tmpsalt: tmpsalt,
+                                    tmpsalt: req.tmpsalt,
                                     mobileinfos: meta
                                 }
                                 User.create(newUser, (err, user) => {
                                     if (!err) {
                                         console.log('______USER DATA_________')
                                         console.log(user)
-                                        var context = {
-                                            link: "localhost:8080/" + user.tmpsalt
-                                        }
-
-
-                                        var mailOptions = {
-                                            from: mail.email,
-                                            to: req.body.email,
-                                            subject: 'Verification of email',
-                                            text: 'please verify your email',
-                                            html: `<h1>localhost:8080/${user.tmpsalt}</h1> <br> <h2>Copy the above link and open in new tab to verify</h2>`
-                                        };
-
-                                        transporter.sendMail(mailOptions, function (err, info) {
-                                            if (err) {
-                                                response = {
-                                                    status: -17,
-                                                    body: {
-                                                        info: "nodemailer smtp error",
-                                                        error: err,
-                                                        content: null
-                                                    }
-                                                }
-                                                res.send(response)
-                                            } else {
-                                                console.log('Email sent: ' + info.response);
-                                                response = {
-                                                    status: 1,
-                                                    body: {
-                                                        info: "user successfully registered",
-                                                        error: null,
-                                                        content: null
-                                                    }
-                                                }
-                                                res.send(response)
+                                        response = {
+                                            status: 1,
+                                            body: {
+                                                info: "user successfully registered",
+                                                error: null,
+                                                content: null
                                             }
-                                        });
+                                        }
+                                        res.send(response)
+
+
                                     } else {
                                         response = {
                                             status: -2,
@@ -149,5 +112,6 @@ router.post('/register', checkparams, (req, res) => {
 
     easyPbkdf2.secureHash(req.body.password, salt, callback)
 })
+
 
 module.exports = router
