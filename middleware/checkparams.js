@@ -27,6 +27,13 @@ function checkparams(req, res, next) { //req.route.path
                 if (!req.body.device.os) { missing.push('device[os]') }
                 if (!req.body.device.battery) { missing.push('device[battery]') }
                 if (!req.body.device.wifi) { missing.push('device[wifi]') }
+                if (!req.body.device.name) { missing.push('device[name]') }
+                if (!req.body.device.location) {
+                    missing.push('device[location]')
+                } else {
+                    if (!req.body.device.location.lat) { missing.push('device[location][lat]') }
+                    if (!req.body.device.location.lng) { missing.push('device[location][lng]') }
+                }
             }
             break
         case '/file/get':
@@ -41,7 +48,7 @@ function checkparams(req, res, next) { //req.route.path
             break
         case '/geoloc':
             if (!req.body.lat) { missing.push('lat') }
-            if (!req.body.lon) { missing.push('lon') }
+            if (!req.body.lng) { missing.push('lng') }
             if (!req.body.imei) { missing.push('imei') }
             break
         case '/token/update':

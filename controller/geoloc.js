@@ -9,12 +9,12 @@ var checkparams = require('../middleware/checkparams')
 router.use(bodyParser.urlencoded({ extended: true }))
 
 
-// get location based on lat and lon
-// recieves lat, lon, imei
+// get location based on lat and lng
+// recieves lat, lng, imei
 router.post('/geoloc', checkparams, (req, res) => {
     var response = {}
-    var loc = { lat: req.body.lat, lon: req.body.lon }
-    var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + loc.lat + ',' + loc.lon + '&key=' + mapApi
+    var loc = { lat: req.body.lat, lon: req.body.lng }
+    var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + loc.lat + ',' + loc.lng + '&key=' + mapApi
     var address
     Mobileinfo.findOne({ imei: req.body.imei }, (err, data) => {
         if (!err && data) {

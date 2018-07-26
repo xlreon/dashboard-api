@@ -7,7 +7,7 @@ var checkparams = require('../middleware/checkparams')
 router.use(bodyParser.urlencoded({ extended: true }))
 // set device details
 // recieves imei and 
-// device object with params os,battery,wifi
+// device object with params os,battery,wifi,name,location
 router.post('/phone/set', checkparams, (req, res) => {
     var response = {}
     device_data = req.body.device
