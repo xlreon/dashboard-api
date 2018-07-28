@@ -16,10 +16,13 @@ var transporter = nodemailer.createTransport(sesTransport({
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
+var currentCode = -1;
+
 router.post('/forgetPassword',(req,res) => {
 var response = {}
     req.session.passCode = Math.floor((Math.random() * 10000) + 1)
     console.log(req.session.passCode)
+    currentCode = req.session.passCode;
     var mailOptions = {
         from: config.email,
         to: req.body.email,
@@ -52,6 +55,21 @@ var response = {}
         }
     }
     res.send(response);
+})
+
+
+router.get('/reset/:id',(req,res) => {
+    console.log(req.params.id,currentCode)
+    if (req.params.id == currentCode) {
+        console.log("Redirecting to update password page")
+        res.writeHead(301,
+            {Location: 'http://localhost:3000/updatePass'}
+        );
+        res.end();
+    }
+    else {
+        console.log("invalid reset link.")
+    }
 })
 
 module.exports = router
