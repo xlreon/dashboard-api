@@ -33,6 +33,9 @@ var commands = {
     },
     "location": {
         "command": "location"
+    },
+    "info": {
+        "command": "info"
     }
 }
 
