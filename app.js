@@ -1,6 +1,7 @@
 var express = require('express')
 var mongoose = require('mongoose')
 var cors = require('cors');
+var storeSession = require('./middleware/sessionStore');
 
 var test = require('./controller/test.js'),
     register = require('./controller/register.js'),
@@ -39,7 +40,7 @@ routes = [
 ]
 
 app.use(cors({ origin: 'http://localhost:3000' }));
-
+storeSession(app);
 // use routers
 routes.map((route) => app.use(route))
 
