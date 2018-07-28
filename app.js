@@ -18,6 +18,7 @@ var test = require('./controller/test.js'),
     passupd = require('./controller/passupd.js'),
     verify = require('./controller/verify.js')
     checkOtp = require('./controller/checkOtp');
+    resetPassowrd = require('./controller/resetPassword');
 
 var app = express()
 
@@ -38,7 +39,8 @@ routes = [
     imeiget,
     passupd,
     verify,
-    checkOtp
+    checkOtp,
+    resetPassowrd
 ]
 
 app.use(cors({ origin: 'http://localhost:3000' }));
