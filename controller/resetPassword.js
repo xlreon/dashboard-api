@@ -6,7 +6,7 @@ var easyPbkdf2 = require("easy-pbkdf2")()
 var sesTransport = require('nodemailer-ses-transport')
 var tmpsalt = easyPbkdf2.generateSalt()
 var config = require('../keys/configBucket.json')
-var host_url = 'http://localhost:8080'
+var host_url = 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:8080'
 
 var transporter = nodemailer.createTransport(sesTransport({
     accessKeyId: config.accessKeyId,

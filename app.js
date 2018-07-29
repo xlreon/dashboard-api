@@ -6,7 +6,7 @@ var storeSession = require('./middleware/sessionStore');
 
 var app = express()
 
-mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:6000/db', { useNewUrlParser: true })
 
 routes = [
     require('./controller/test.js'),
@@ -28,7 +28,8 @@ routes = [
     require('./controller/loginWeb')
 ]
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+// app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000' }));
 storeSession(app);
 // use routers
 routes.map((route) => app.use(route))
