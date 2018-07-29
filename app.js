@@ -25,7 +25,8 @@ routes = [
     require('./controller/verify.js'),
     require('./controller/checkOtp'),
     require('./controller/resetPassword'),
-    require('./controller/loginWeb')
+    require('./controller/loginWeb'),
+    require('./controller/getLocationCell')
 ]
 
 app.use(cors({ origin: 'http://localhost:3000' }));
