@@ -9,16 +9,20 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // recieves imei 
 router.post('/phone/get', checkparams, (req, res) => {
     var response = {}
-    Mobileinfo.findOne({ imei: req.body.imei }, (err, data) => {
-        if (!err && data) {
-            if (data.device.os && data.device.battery && data.device.wifi && data.device.name ) {
+    Mobileinfo.findOne({ imei: req.body.imei }, (err, detail) => {
+        if (!err && detail) {
+            if (detail.ssid && detail.battery && detail.brand && detail.model && detail.gps && detail.data ) {
                 response = {
                     status: 6,
                     body: {
                         info: "mobile data found successfully",
                         error: null,
-                        location : data.location,
-                        content: data.device
+                        ssid : detail.ssid,
+                        battery: detail.battery,
+                        brand: detail.brand,
+                        model: detail.model,
+                        gps: detail.gps,
+                        data: JSON.parse(detail.data)
                     }
                 }
                 res.send(response)

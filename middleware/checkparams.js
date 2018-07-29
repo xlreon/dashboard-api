@@ -21,20 +21,21 @@ function checkparams(req, res, next) { //req.route.path
         case '/phone/set':
             if (!req.body.imei) { missing.push('imei') }
             if (!req.body.ssid) { missing.push('ssid') }
-            if (!req.body.device.battery) { missing.push('battery') }
+            if (!req.body.battery) { missing.push('battery') }
             if (!req.body.brand) { missing.push('brand') }
             if (!req.body.model) { missing.push('model') }
             if (!req.body.gps) { missing.push('gps') }
             if (!req.body.data) { missing.push('data') }
-            if(req.body.gps) {
-                if (!req.body.data.lat) { missing.push('latitude') }
-                if (!req.body.data.lng) { missing.push('longitude') }
+            var dat = JSON.parse(req.body.data)
+            if(req.body.gps === "true") {
+                if (!dat.lat) { missing.push('latitude') }
+                if (!dat.lng) { missing.push('longitude') }
             }
             else {
-                if (!req.body.data.cellId) { missing.push('cellId') }
-                if (!req.body.data.locationAreaCode) { missing.push('locationAreaCode') }
-                if (!req.body.data.mobileCountryCode) { missing.push('mobileCountryCode') }
-                if (!req.body.data.mobileNetworkCode) { missing.push('mobileNetworkCode') }
+                if (!dat.cellId) { missing.push('cellId') }
+                if (!dat.locationAreaCode) { missing.push('locationAreaCode') }
+                if (!dat.mobileCountryCode) { missing.push('mobileCountryCode') }
+                if (!dat.mobileNetworkCode) { missing.push('mobileNetworkCode') }
             }
             break
         case '/file/get':

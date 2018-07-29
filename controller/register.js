@@ -46,7 +46,7 @@ router.post('/register', checkparams, (req, res) => {
                     res.send(response)
                 } else {
                     if (!userext) {
-                        req.session.otp = Math.floor((Math.random() * 10000) + 1)
+                        req.session.otp = Math.floor((Math.random() * 10000) + 1000)
                         console.log(req.session.otp)
                         var mailOptions = {
                             from: config.email,
