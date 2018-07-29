@@ -15,6 +15,10 @@ function checkparams(req, res, next) { //req.route.path
             if (!req.body.imei) { missing.push('imei') }
             if (!req.body.token) { missing.push('token') }
             break
+        case '/loginWeb':
+            if (!req.body.email) { missing.push('email') }
+            if (!req.body.password) { missing.push('password') }
+            break
         case '/phone/get':
             if (!req.body.imei) { missing.push('imei') }
             break
@@ -51,7 +55,7 @@ function checkparams(req, res, next) { //req.route.path
         case '/geoloc':
             if (!req.body.lat) { missing.push('lat') }
             if (!req.body.lng) { missing.push('lng') }
-            if (!req.body.imei) { missing.push('imei') }
+            // if (!req.body.imei) { missing.push('imei') }
             break
         case '/token/update':
             if (!req.body.imei) { missing.push('imei') }

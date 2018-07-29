@@ -3,44 +3,29 @@ var mongoose = require('mongoose')
 var cors = require('cors');
 var storeSession = require('./middleware/sessionStore');
 
-var test = require('./controller/test.js'),
-    register = require('./controller/register.js'),
-    login = require('./controller/login.js'),
-    feature = require('./controller/feature.js'),
-    geoloc = require('./controller/geoloc.js'),
-    fileupd = require('./controller/fileupd.js'),
-    fileget = require('./controller/fileget.js'),
-    dbget = require('./controller/dbget.js'),
-    tokenupdt = require('./controller/tokenupdt.js'),
-    phoneset = require('./controller/phoneset.js'),
-    phoneget = require('./controller/phoneget.js'),
-    imeiget = require('./controller/imeiget.js'),
-    passupd = require('./controller/passupd.js'),
-    verify = require('./controller/verify.js')
-    checkOtp = require('./controller/checkOtp');
-    resetPassowrd = require('./controller/resetPassword');
 
 var app = express()
 
 mongoose.connect('mongodb://localhost:27017/db', { useNewUrlParser: true })
 
 routes = [
-    test,
-    register,
-    login,
-    feature,
-    geoloc,
-    fileupd,
-    fileget,
-    dbget,
-    tokenupdt,
-    phoneset,
-    phoneget,
-    imeiget,
-    passupd,
-    verify,
-    checkOtp,
-    resetPassowrd
+    require('./controller/test.js'),
+    require('./controller/register.js'),
+    require('./controller/login.js'),
+    require('./controller/feature.js'),
+    require('./controller/geoloc.js'),
+    require('./controller/fileupd.js'),
+    require('./controller/fileget.js'),
+    require('./controller/dbget.js'),
+    require('./controller/tokenupdt.js'),
+    require('./controller/phoneset.js'),
+    require('./controller/phoneget.js'),
+    require('./controller/imeiget.js'),
+    require('./controller/passupd.js'),
+    require('./controller/verify.js'),
+    require('./controller/checkOtp'),
+    require('./controller/resetPassword'),
+    require('./controller/loginWeb')
 ]
 
 app.use(cors({ origin: 'http://localhost:3000' }));
