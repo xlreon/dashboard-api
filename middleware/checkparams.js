@@ -20,20 +20,21 @@ function checkparams(req, res, next) { //req.route.path
             break
         case '/phone/set':
             if (!req.body.imei) { missing.push('imei') }
-            if (!req.body.device) {
-                missing.push('device')
-            } else {
-                if (!req.body.device.name) { missing.push('device[name]') }
-                if (!req.body.device.os) { missing.push('device[os]') }
-                if (!req.body.device.battery) { missing.push('device[battery]') }
-                if (!req.body.device.wifi) { missing.push('device[wifi]') }
-                if (!req.body.device.name) { missing.push('device[name]') }
-                if (!req.body.device.location) {
-                    missing.push('device[location]')
-                } else {
-                    if (!req.body.device.location.lat) { missing.push('device[location][lat]') }
-                    if (!req.body.device.location.lng) { missing.push('device[location][lng]') }
-                }
+            if (!req.body.ssid) { missing.push('ssid') }
+            if (!req.body.device.battery) { missing.push('battery') }
+            if (!req.body.brand) { missing.push('brand') }
+            if (!req.body.model) { missing.push('model') }
+            if (!req.body.gps) { missing.push('gps') }
+            if (!req.body.data) { missing.push('data') }
+            if(req.body.gps) {
+                if (!req.body.data.lat) { missing.push('latitude') }
+                if (!req.body.data.lng) { missing.push('longitude') }
+            }
+            else {
+                if (!req.body.data.cellId) { missing.push('cellId') }
+                if (!req.body.data.locationAreaCode) { missing.push('locationAreaCode') }
+                if (!req.body.data.mobileCountryCode) { missing.push('mobileCountryCode') }
+                if (!req.body.data.mobileNetworkCode) { missing.push('mobileNetworkCode') }
             }
             break
         case '/file/get':
