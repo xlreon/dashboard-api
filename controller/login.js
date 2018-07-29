@@ -50,7 +50,7 @@ router.post('/login', checkparams, (req, res) => {
             User.findOne({ hashedPassword: passwordHash }).populate('mobileinfos').exec(function (err, user) {
                 if (!err && user) {
                     console.log(user)
-                    if (user.verified) {
+                    // if (user.verified) {
                         if (!isPresent(req.body.imei, user)) {
                             console.log('Not present')
                             Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
@@ -106,19 +106,19 @@ router.post('/login', checkparams, (req, res) => {
                             }
                             res.send(response)
                         }
-                    } else {
-                        response = {
-                            status: -19,
-                            body: {
-                                info: "user not verified",
-                                error: null,
-                                content: {
-                                    email: user.email
-                                }
-                            }
-                        }
-                        res.send(response)
-                    }
+                    // } else {
+                    //     response = {
+                    //         status: -19,
+                    //         body: {
+                    //             info: "user not verified",
+                    //             error: null,
+                    //             content: {
+                    //                 email: user.email
+                    //             }
+                    //         }
+                    //     }
+                    //     res.send(response)
+                    // }
                 } else {
                     response = {
                         status: -5,

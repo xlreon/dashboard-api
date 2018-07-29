@@ -16,6 +16,7 @@ var test = require('./controller/test.js'),
     imeiget = require('./controller/imeiget.js'),
     passupd = require('./controller/passupd.js'),
     verify = require('./controller/verify.js')
+    loginWeb = require('./controller/loginWeb');
 
 var app = express()
 
@@ -25,6 +26,7 @@ routes = [
     test,
     register,
     login,
+    loginWeb,
     feature,
     geoloc,
     fileupd,

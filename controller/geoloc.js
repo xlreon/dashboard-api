@@ -13,11 +13,11 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // recieves lat, lng, imei
 router.post('/geoloc', checkparams, (req, res) => {
     var response = {}
-    var loc = { lat: req.body.lat, lon: req.body.lng }
-    var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + loc.lat + ',' + loc.lng + '&key=' + mapApi
-    var address
-    Mobileinfo.findOne({ imei: req.body.imei }, (err, data) => {
-        if (!err && data) {
+    var loc = { lat: req.body.lat, lng: req.body.lng }
+    var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + loc.lat + ',' + loc.lng
+    // var address
+    // Mobileinfo.findOne({ imei: req.body.imei }, (err, data) => {
+        // if (!err && data) {
             request(url, (err, resp, body) => {
                 if (!err && resp.statusCode == 200) {
                     var address = []
@@ -45,19 +45,19 @@ router.post('/geoloc', checkparams, (req, res) => {
                     res.send(response)
                 }
             })
-        }
-        else {
-            response = {
-                status: -6,
-                body: {
-                    info: 'Invalid imei',
-                    error: err,
-                    content: null
-                }
-            }
-            res.send(response)
-        }
-    })
+        // }
+        // else {
+        //     response = {
+        //         status: -6,
+        //         body: {
+        //             info: 'Invalid imei',
+        //             error: err,
+        //             content: null
+        //         }
+        //     }
+        //     res.send(response)
+        // }
+    // })
 })
 
 module.exports = router
