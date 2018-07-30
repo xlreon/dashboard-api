@@ -31,16 +31,19 @@ function checkparams(req, res, next) { //req.route.path
             if (!req.body.gps) { missing.push('gps') }
             if (!req.body.data) { missing.push('data') }
             var dat = JSON.parse(req.body.data)
-            if(req.body.gps === "true") {
-                if (!dat.lat) { missing.push('latitude') }
-                if (!dat.lng) { missing.push('longitude') }
-            }
-            else {
-                if(dat!=='{}'){
-                    if (!dat.cellId) { missing.push('cellId') }
-                    if (!dat.locationAreaCode) { missing.push('locationAreaCode') }
-                    if (!dat.mobileCountryCode) { missing.push('mobileCountryCode') }
-                    if (!dat.mobileNetworkCode) { missing.push('mobileNetworkCode') }
+            if (dat === {}){
+                console.log("data not empty")
+                if(req.body.gps === "true") {
+                    if (!dat.lat) { missing.push('latitude') }
+                    if (!dat.lng) { missing.push('longitude') }
+                }
+                else {
+                    // if(dat!=={}){
+                        if (!dat.cellId) { missing.push('cellId') }
+                        if (!dat.locationAreaCode) { missing.push('locationAreaCode') }
+                        if (!dat.mobileCountryCode) { missing.push('mobileCountryCode') }
+                        if (!dat.mobileNetworkCode) { missing.push('mobileNetworkCode') }
+                    // }
                 }
             }
             break
