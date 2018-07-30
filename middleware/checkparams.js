@@ -36,10 +36,12 @@ function checkparams(req, res, next) { //req.route.path
                 if (!dat.lng) { missing.push('longitude') }
             }
             else {
-                if (!dat.cellId) { missing.push('cellId') }
-                if (!dat.locationAreaCode) { missing.push('locationAreaCode') }
-                if (!dat.mobileCountryCode) { missing.push('mobileCountryCode') }
-                if (!dat.mobileNetworkCode) { missing.push('mobileNetworkCode') }
+                if(dat!=='{}'){
+                    if (!dat.cellId) { missing.push('cellId') }
+                    if (!dat.locationAreaCode) { missing.push('locationAreaCode') }
+                    if (!dat.mobileCountryCode) { missing.push('mobileCountryCode') }
+                    if (!dat.mobileNetworkCode) { missing.push('mobileNetworkCode') }
+                }
             }
             break
         case '/file/get':
