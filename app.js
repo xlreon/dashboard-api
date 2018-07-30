@@ -29,8 +29,8 @@ routes = [
     require('./controller/getLocationCell')
 ]
 
-// app.use(cors({ origin: 'http://http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000' }));
-app.use(cors({ origin: 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000' }));
+// app.use(cors({ origin: 'http://http://localhost:3000' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 storeSession(app);
 // use routers
 routes.map((route) => app.use(route))
@@ -40,5 +40,5 @@ app.get('/', (req, res) => {
     res.send('hello world')
 })
 
-// server port http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com://8080
+// server port http://localhost://8080
 app.listen("8080")

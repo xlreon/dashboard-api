@@ -6,7 +6,8 @@ var easyPbkdf2 = require("easy-pbkdf2")()
 var sesTransport = require('nodemailer-ses-transport')
 var tmpsalt = easyPbkdf2.generateSalt()
 var config = require('../keys/configBucket.json')
-var host_url = 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:8080'
+var host_url = 'http://localhost:8080'
+var md5 = require('md5');
 
 var transporter = nodemailer.createTransport(sesTransport({
     accessKeyId: config.accessKeyId,
@@ -20,7 +21,8 @@ var currentCode = -1;
 
 router.post('/forgetPassword',(req,res) => {
 var response = {}
-    req.session.passCode = Math.floor((Math.random() * 10000) + 1)
+    // req.session.passCode = Math.floor((Math.random() * 10000) + 1)
+    req.session.passCode = md5(req.body.email)
     console.log(req.session.passCode)
     currentCode = req.session.passCode;
     var mailOptions = {
@@ -63,7 +65,7 @@ router.get('/reset/:id',(req,res) => {
     if (req.params.id == currentCode) {
         console.log("Redirecting to update password page")
         res.writeHead(301,
-            {Location: 'http://http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000/updatePass'}
+            {Location: 'http://http://localhost:3000/updatePass'}
         );
         res.end();
     }

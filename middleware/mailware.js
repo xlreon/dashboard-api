@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer')
 var sesTransport = require('nodemailer-ses-transport')
-var host_url = 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:8080'
+var host_url = 'http://localhost:8080'
 var easyPbkdf2 = require("easy-pbkdf2")()
 var tmpsalt = easyPbkdf2.generateSalt()
 var config = require('../keys/configBucket.json')
