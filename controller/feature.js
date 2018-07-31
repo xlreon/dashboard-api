@@ -85,10 +85,10 @@ router.post("/feature", checkparams, (req, res) => {
     })
 })
 
-router.post("feature/setRemotePassword",(req,res) => {
+router.post("/feature/setRemotePassword",(req,res) => {
     var response = {}
     var token = req.body.token
-    var pass = req.body.password
+    var password = req.body.password
     var message = req.body.message
     var phone = req.body.phone
     console.log("Current feature -> set remote password")
