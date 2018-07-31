@@ -4,7 +4,7 @@ var serverKey = require('../keys/serverKey.json')
 var FCM = require('fcm-node')
 var fcm = new FCM(serverKey)
 var bodyParser = require("body-parser")
-var deviceToken = require('../keys/token.json')
+// var deviceToken = require('../keys/token.json')
 var checkparams = require('../middleware/checkparams')
 
 router.use(bodyParser.urlencoded({ extended: true }))
@@ -21,13 +21,6 @@ var commands = {
         "command": "alarm",
         "action": "off"
     },
-    "setRemotePassword": {
-        "command": "password",
-        "pass": "1234",
-        "custom": "true", // true or false depending on the message
-        "message": "This phone is lost", // optional
-        "phone": "9090909090" // optional
-    },
     "lock": {
         "command": "lock"
     },
@@ -36,6 +29,14 @@ var commands = {
     },
     "info": {
         "command": "info"
+    },
+    "preventOn": {
+        "command": "prevent",
+        "action": "on"
+    },
+    "preventOff": {
+        "command": "prevent",
+        "action": "off"
     }
 }
 
@@ -45,11 +46,7 @@ getCommand = (commandName, token) => {
     return {
         to: token,
         priority: "high",
-        data: commands[commandName],
-        notification: {
-            title: commandName,
-            body: commands[commandName]
-        }
+        data: commands[commandName]
     }
 }
 
@@ -58,8 +55,54 @@ getCommand = (commandName, token) => {
 router.post("/feature", checkparams, (req, res) => {
     var response = {}
     var featureName = req.body.featureName
+    var token = req.body.token
     console.log("Current feature -> ", featureName)
-    var message = getCommand(featureName, deviceToken)
+    var message = getCommand(featureName, token)
+    fcm.send(message, (err, result) => {
+        if (err) {
+            response = {
+                status: -1,
+                body: {
+                    info: 'Message not sent',
+                    error: err,
+                    content: null
+                }
+            }
+            res.send(response)
+        }
+        else {
+            console.log('Notification sent to token id')
+            response = {
+                status: 1,
+                body: {
+                    info: 'Successfully sent',
+                    error: null,
+                    content: result
+                }
+            }
+            res.send(response)
+        }
+    })
+})
+
+router.post("feature/setRemotePassword",(req,res) => {
+    var response = {}
+    var token = req.body.token
+    var pass = req.body.password
+    var message = req.body.message
+    var phone = req.body.phone
+    console.log("Current feature -> set remote password")
+    var message = {
+        to: token,
+        priority: "high",
+        data: {
+                "command": "password",
+                "pass": password,
+                "custom": "true", // true or false depending on the message
+                "message": message, // optional
+                "phone": phone // optional
+        }
+    }
     fcm.send(message, (err, result) => {
         if (err) {
             response = {
