@@ -6,6 +6,7 @@ var fcm = new FCM(serverKey)
 var bodyParser = require("body-parser")
 // var deviceToken = require('../keys/token.json')
 var checkparams = require('../middleware/checkparams')
+var MobileInfo = require('../models/mobileinfo')
 
 router.use(bodyParser.urlencoded({ extended: true }))
 
@@ -87,23 +88,30 @@ router.post("/feature", checkparams, (req, res) => {
 
 router.post("/feature/setRemotePassword",(req,res) => {
     var response = {}
-    var token = req.body.token
+    var imei = req.body.imei
     var password = req.body.password
     var message = req.body.message
     var phone = req.body.phone
+    var token = {}
     console.log("Current feature -> set remote password")
-    var message = {
-        to: token,
-        priority: "high",
+
+    MobileInfo.findOne({imei: imei},(err,user)=>{
+        token = user.token
+        // console.log(token)
+        // console.log(user)
+        
+        var fcmMessage = {
+            to: token,
+            priority: "high",
         data: {
-                "command": "password",
-                "pass": password,
-                "custom": "true", // true or false depending on the message
-                "message": message, // optional
-                "phone": phone // optional
+            "command": "password",
+            "pass": password,
+            "custom": "true", // true or false depending on the message
+            "message": message, // optional
+            "phone": phone // optional
         }
     }
-    fcm.send(message, (err, result) => {
+    fcm.send(fcmMessage, (err, result) => {
         if (err) {
             response = {
                 status: -1,
@@ -127,6 +135,7 @@ router.post("/feature/setRemotePassword",(req,res) => {
             }
             res.send(response)
         }
+    })
     })
 })
 
