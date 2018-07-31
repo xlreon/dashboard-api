@@ -56,7 +56,12 @@ getCommand = (commandName, token) => {
 router.post("/feature", checkparams, (req, res) => {
     var response = {}
     var featureName = req.body.featureName
-    var token = req.body.token
+    var imei = req.body.imei
+    var token = {}
+    MobileInfo.findOne({imei: imei},(err,user) => {
+        token = user.token
+        console.log(token)
+    })
     console.log("Current feature -> ", featureName)
     var message = getCommand(featureName, token)
     fcm.send(message, (err, result) => {
