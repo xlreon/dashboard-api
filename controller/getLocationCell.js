@@ -13,16 +13,25 @@ router.post('/getLatLng',(req,res)=>{
             data
         ]
     })
-    console.log(reqBody)
-    axios.post('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBBwph33rM5FjgIjYzp2L0pgaqCbWW9-Ts',{headers: {
+    console.log("celltower",reqBody)
+    axios.post('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBBwph33rM5FjgIjYzp2L0pgaqCbWW9-Ts',reqBody,{headers: {
         'Content-Type': 'application/json'
-    }},reqBody)
+    }})
     .then(r => {
         console.log(r.data)
-        res.send(r.data.location)
+        let response={
+        	status:1,
+        	lat:r.data.location.lat,
+        	lng:r.data.location.lng
+        }
+        res.send(response)
     })
     .catch(err => {
         console.log(err)
+        let response={
+        	status:-1
+        }
+        res.send(response)
     })
 
 })

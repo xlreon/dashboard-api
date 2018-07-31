@@ -14,6 +14,8 @@ var s3 = new AWS.S3()
 // update images type should be multipart/form-data
 // recieves imei and mult
 router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showld be a file and name should be mult 
+	console.log(req.file.mimetype)
+
     var response = {}
     var missing = []
     if (!req.body.imei) {
@@ -39,6 +41,7 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
         Mobileinfo.findOne({ imei: req.body.imei }, (err, mobileinfo) => {
             if (!err && mobileinfo) {
                 console.log(req.file)
+                console.log(req.file.mimetype)
                 console.log('\n\n\n')
 
                 if (isValideFile(req.file.mimetype)) {
@@ -132,7 +135,7 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
 
 function isValideFile(file_type) {
 
-    if (['x-matroska', 'matroska', 'mp4', '3gpp', '3gp', 'webm', 'png', 'jpeg', 'bmp', 'gif', 'x-vcard', 'vnd.ms-excel'].indexOf(file_type.split('/')[1]) !== -1) {
+    if (['x-matroska','*', 'matroska', 'mp4', '3gpp', '3gp', 'webm', 'png', 'jpeg', 'bmp', 'gif', 'x-vcard', 'vnd.ms-excel'].indexOf(file_type.split('/')[1]) !== -1) {
         return true
     } else {
         return false
