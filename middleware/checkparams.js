@@ -1,4 +1,5 @@
 function checkparams(req, res, next) { //req.route.path
+    console.log(req)
     var missing = []
     switch (req.route.path) {
         case '/register':

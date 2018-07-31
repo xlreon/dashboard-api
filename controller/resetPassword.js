@@ -21,8 +21,7 @@ var currentCode = -1;
 
 router.post('/forgetPassword',(req,res) => {
 var response = {}
-    // req.session.passCode = Math.floor((Math.random() * 10000) + 1)
-    req.session.passCode = md5(req.body.email)
+    req.session.passCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
     console.log(req.session.passCode)
     currentCode = req.session.passCode;
     var mailOptions = {
