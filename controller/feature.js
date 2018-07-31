@@ -59,8 +59,10 @@ router.post("/feature", checkparams, (req, res) => {
     var imei = req.body.imei
     var token = {}
     MobileInfo.findOne({imei: imei},(err,user) => {
+        // console.log(user)
+        if(user!==null) {
         token = user.token
-        console.log(token)
+        // console.log(token)
         console.log("Current feature -> ", featureName)
         var message = getCommand(featureName, token)
         console.log(message)
@@ -89,6 +91,7 @@ router.post("/feature", checkparams, (req, res) => {
                 res.send(response)
             }
         })
+        }
     })
     })
     
@@ -102,6 +105,7 @@ router.post("/feature", checkparams, (req, res) => {
         console.log("Current feature -> set remote password")
 
     MobileInfo.findOne({imei: imei},(err,user)=>{
+        if(user!==null) {
         token = user.token
         // console.log(token)
         // console.log(user)
@@ -142,6 +146,7 @@ router.post("/feature", checkparams, (req, res) => {
             res.send(response)
         }
     })
+    }
     })
 })
 
