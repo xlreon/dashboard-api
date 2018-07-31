@@ -61,44 +61,45 @@ router.post("/feature", checkparams, (req, res) => {
     MobileInfo.findOne({imei: imei},(err,user) => {
         token = user.token
         console.log(token)
-    })
-    console.log("Current feature -> ", featureName)
-    var message = getCommand(featureName, token)
-    fcm.send(message, (err, result) => {
-        if (err) {
-            response = {
-                status: -1,
-                body: {
-                    info: 'Message not sent',
-                    error: err,
-                    content: null
+        console.log("Current feature -> ", featureName)
+        var message = getCommand(featureName, token)
+        console.log(message)
+        fcm.send(message, (err, result) => {
+            if (err) {
+                response = {
+                    status: -1,
+                    body: {
+                        info: 'Message not sent',
+                        error: err,
+                        content: null
+                    }
                 }
+                res.send(response)
             }
-            res.send(response)
-        }
-        else {
-            console.log('Notification sent to token id')
-            response = {
-                status: 1,
-                body: {
-                    info: 'Successfully sent',
-                    error: null,
-                    content: result
+            else {
+                console.log('Notification sent to token id')
+                response = {
+                    status: 1,
+                    body: {
+                        info: 'Successfully sent',
+                        error: null,
+                        content: result
+                    }
                 }
+                res.send(response)
             }
-            res.send(response)
-        }
+        })
     })
-})
-
-router.post("/feature/setRemotePassword",(req,res) => {
-    var response = {}
-    var imei = req.body.imei
-    var password = req.body.password
-    var message = req.body.message
-    var phone = req.body.phone
-    var token = {}
-    console.log("Current feature -> set remote password")
+    })
+    
+    router.post("/feature/setRemotePassword",(req,res) => {
+        var response = {}
+        var imei = req.body.imei
+        var password = req.body.password
+        var message = req.body.message
+        var phone = req.body.phone
+        var token = {}
+        console.log("Current feature -> set remote password")
 
     MobileInfo.findOne({imei: imei},(err,user)=>{
         token = user.token

@@ -6,7 +6,7 @@ var storeSession = require('./middleware/sessionStore');
 
 var app = express()
 
-mongoose.connect('mongodb://localhost:6000/db', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:6000/nDb', { useNewUrlParser: true })
 
 routes = [
     require('./controller/test.js'),
