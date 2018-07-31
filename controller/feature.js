@@ -56,6 +56,8 @@ getCommand = (commandName, token) => {
 router.post("/feature", checkparams, (req, res) => {
     var response = {}
     var featureName = req.body.featureName
+    if(req.body.imei !== undefined || req.body.imei !== null){
+
     var imei = req.body.imei
     var token = {}
     MobileInfo.findOne({imei: imei},(err,user) => {
@@ -93,10 +95,12 @@ router.post("/feature", checkparams, (req, res) => {
         })
         }
     })
+    }
     })
     
     router.post("/feature/setRemotePassword",(req,res) => {
         var response = {}
+        if(req.body.imei !== undefined || req.body.imei !== null){
         var imei = req.body.imei
         var password = req.body.password
         var message = req.body.message
@@ -148,6 +152,7 @@ router.post("/feature", checkparams, (req, res) => {
     })
     }
     })
+    }
 })
 
 module.exports = router
