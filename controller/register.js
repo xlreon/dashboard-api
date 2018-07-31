@@ -91,33 +91,33 @@ router.post('/register', checkparams, (req, res) => {
                         //             tmpsalt: req.tmpsalt,
                         //             mobileinfos: meta
                         //         }
-                                // User.create(newUser, (err, user) => {
-                                //     if (!err) {
-                                //         console.log('______USER DATA_________')
-                                //         console.log(user)
-                                //         response = {
-                                //             status: 1,
-                                //             body: {
-                                //                 info: "user successfully registered",
-                                //                 error: null,
-                                //                 content: null
-                                //             }
-                                //         }
-                                //         res.send(response)
+                        // User.create(newUser, (err, user) => {
+                        //     if (!err) {
+                        //         console.log('______USER DATA_________')
+                        //         console.log(user)
+                        //         response = {
+                        //             status: 1,
+                        //             body: {
+                        //                 info: "user successfully registered",
+                        //                 error: null,
+                        //                 content: null
+                        //             }
+                        //         }
+                        //         res.send(response)
 
 
-                                //     } else {
-                                //         response = {
-                                //             status: -2,
-                                //             body: {
-                                //                 info: "user db eroor",
-                                //                 error: err,
-                                //                 content: null
-                                //             }
-                                //         }
-                                //         res.send(response)
-                                //     }
-                                // })
+                        //     } else {
+                        //         response = {
+                        //             status: -2,
+                        //             body: {
+                        //                 info: "user db eroor",
+                        //                 error: err,
+                        //                 content: null
+                        //             }
+                        //         }
+                        //         res.send(response)
+                        //     }
+                        // })
                         //     } else {
                         //         response = {
                         //             status: -3,

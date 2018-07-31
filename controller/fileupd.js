@@ -51,7 +51,8 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                     }
                     s3.upload(file, (err, data) => {
                         if (!err) {
-                            data_file = { key: req.file.mimetype.split('/')[0], name: data.Key }
+                            console.log(data)
+                            data_file = { key: req.file.mimetype.split('/')[0], name: data.Key, location: data.Location }
                             mobileinfo.files.push(data_file)
                             mobileinfo.save((err, mobileinfo) => {
                                 if (!err) {
@@ -62,7 +63,8 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                                             error: null,
                                             content: {
                                                 key: data_file.key,
-                                                name: data_file.name
+                                                name: data_file.name,
+                                                location: data_file.location
                                             }
                                         }
                                     }

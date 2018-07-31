@@ -21,9 +21,10 @@ var mobileinfo = mongoose.Schema({
     // },
     files: [{
         key: String,
-        name: String
+        name: String,
+        location: String
     }]
-    
+
 })
 
 module.exports = mongoose.model('Mobileinfo', mobileinfo)
