@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router();
+var EmailOtp = require('../models/emailOtp')
 var User = require('../models/user')
 var Mobileinfo = require('../models/mobileinfo')
 var easyPbkdf2 = require("easy-pbkdf2")()
@@ -32,6 +33,14 @@ router.post('/register', checkparams, (req, res) => {
     callback = (err, passwordHash, originalSalt) => {
         if (!err) {
             hashedPassword = passwordHash
+            var otp = Math.floor((Math.random() * 10000) + 1000)
+            var mailOptions = {
+                from: config.email,
+                to: req.body.email,
+                subject: 'Verification of email',
+                text: 'please verify your email',
+                html: `<h1>${otp} is your OTP</h1>`
+            };
 
             User.findOne({ email: req.body.email }, (err, userext) => {
                 if (!err && userext) {
@@ -46,90 +55,91 @@ router.post('/register', checkparams, (req, res) => {
                     res.send(response)
                 } else {
                     if (!userext) {
-                        req.session.otp = Math.floor((Math.random() * 10000) + 1000)
-                        console.log(req.session.otp)
-                        var mailOptions = {
-                            from: config.email,
-                            to: req.body.email,
-                            subject: 'Verification of email',
-                            text: 'please verify your email',
-                            html: `<h1>${req.session.otp} is your OTP</h1>`
-                        };
-                        transporter.sendMail(mailOptions, function (err, info) {
-                            if (err) {
-                                response = {
-                                    status: -17,
-                                    body: {
-                                        info: "nodemailer smtp error",
-                                        error: err,
-                                        content: null
+                        // console.log(req.session.otp)
+                        EmailOtp.findOne({email: req.body.email},(err,user) => {
+                            if(user) {
+                                EmailOtp.findOneAndUpdate({email: user.email},{'$set': {'otp': otp}},(err,user)=>{
+                                    if(user) {
+                                        transporter.sendMail(mailOptions, function (err, info) {
+                                            if (err) {
+                                                response = {
+                                                    status: -17,
+                                                    body: {
+                                                        info: "nodemailer smtp error",
+                                                        error: err,
+                                                        content: null
+                                                    }
+                                                }
+                                                res.send(response)
+                                            } else {
+                                                console.log('Email sent: ' + info.envelope.to[0]);
+                                                req.tmpsalt = tmpsalt
+                                            }
+                                        });
+                                        response = {
+                                            status: 1,
+                                            body: {
+                                                info: "OTP Sent successfully",
+                                                error: null,
+                                                content: null
+                                            }
+                                        }
+                                        res.send(response);
+                                    }
+                                    else {
+                                        reponse = {
+                                            status: -1,
+                                            body: {
+                                                info: "error generating otp for email",
+                                                description: "Error creating Email otp db"
+                                            }
+                                        }
+                                    }                                    
+                                })
+                            }
+                            else {
+                                EmailOtp.create({email: req.body.email, otp: otp},(err,user) => {
+                                    console.log(user)
+                                    if(user) {
+                                    transporter.sendMail(mailOptions, function (err, info) {
+                                        if (err) {
+                                            response = {
+                                                status: -17,
+                                                body: {
+                                                    info: "nodemailer smtp error",
+                                                    error: err,
+                                                    content: null
+                                                }
+                                            }
+                                            res.send(response)
+                                        } else {
+                                            console.log('Email sent: ' + info.envelope.to[0]);
+                                            req.tmpsalt = tmpsalt
+                                        }
+                                    });
+                                    response = {
+                                        status: 1,
+                                        body: {
+                                            info: "OTP Sent successfully",
+                                            error: null,
+                                            content: null
+                                        }
+                                    }
+                                    res.send(response);
+                                }
+                                else {
+                                    reponse = {
+                                        status: -1,
+                                        body: {
+                                            info: "error generating otp for email",
+                                            description: "Error creating Email otp db"
+                                        }
                                     }
                                 }
-                                res.send(response)
-                            } else {
-                                console.log('Email sent: ' + info.envelope.to[0]);
-                                req.tmpsalt = tmpsalt
+                                })
                             }
-                        });
-                        response = {
-                            status: 1,
-                            body: {
-                                info: "OTP Sent successfully",
-                                error: null,
-                                content: null
-                            }
-                        }
-                        res.send(response);
-                        // Mobileinfo.create({ imei: req.body.imei, token: req.body.token }, (err, meta) => {
-                        //     if (!err) {
-                        //         var newUser = {
-                        //             name: req.body.name,
-                        //             email: req.body.email,
-                        //             e_no: req.body.e_no,
-                        //             hashedPassword: hashedPassword,
-                        //             salt: salt,
-                        //             tmpsalt: req.tmpsalt,
-                        //             mobileinfos: meta
-                        //         }
-                        // User.create(newUser, (err, user) => {
-                        //     if (!err) {
-                        //         console.log('______USER DATA_________')
-                        //         console.log(user)
-                        //         response = {
-                        //             status: 1,
-                        //             body: {
-                        //                 info: "user successfully registered",
-                        //                 error: null,
-                        //                 content: null
-                        //             }
-                        //         }
-                        //         res.send(response)
-
-
-                        //     } else {
-                        //         response = {
-                        //             status: -2,
-                        //             body: {
-                        //                 info: "user db eroor",
-                        //                 error: err,
-                        //                 content: null
-                        //             }
-                        //         }
-                        //         res.send(response)
-                        //     }
-                        // })
-                        //     } else {
-                        //         response = {
-                        //             status: -3,
-                        //             body: {
-                        //                 info: "imei and token db eroor",
-                        //                 error: err,
-                        //                 content: null
-                        //             }
-                        //         }
-                        //         res.send(response)
-                        //     }
-                        // })
+                        })
+                        
                     } else {
                         response = {
                             status: -2,
