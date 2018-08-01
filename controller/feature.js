@@ -104,49 +104,65 @@ router.post("/feature", checkparams, (req, res) => {
         var token = {}
         console.log("Current feature -> set remote password")
 
-    MobileInfo.findOne({imei: imei},(err,user)=>{
-        if(user!==null) {
-        token = user.token
-        // console.log(token)
-        // console.log(user)
-        
-        var fcmMessage = {
-            to: token,
-            priority: "high",
-        data: {
-            "command": "password",
-            "pass": password,
-            "custom": "true", // true or false depending on the message
-            "message": message, // optional
-            "phone": phone // optional
-        }
-    }
-    fcm.send(fcmMessage, (err, result) => {
-        if (err) {
-            response = {
-                status: -1,
-                body: {
-                    info: 'Message not sent',
-                    error: err,
-                    content: null
+        MobileInfo.findOne({imei: imei},(err,user)=>{
+            if(user!==null) {
+            token = user.token
+                if (message || phone)
+                    {    
+                    // console.log(token)
+                // console.log(user)
+                    var fcmMessage = {
+                        to: token,
+                        priority: "high",
+                    data: {
+                        "command": "password",
+                        "pass": password,
+                        "custom": "true", // true or false depending on the message
+                        "message": message, // optional
+                        "phone": phone // optional
+                    }
                 }
-            }
-            res.send(response)
-        }
-        else {
-            console.log('Notification sent to token id')
-            response = {
-                status: 1,
-                body: {
-                    info: 'Successfully sent',
-                    error: null,
-                    content: result
+                // console.log("true block")
                 }
+                else {
+                    var fcmMessage = {
+                        to: token,
+                        priority: "high",
+                        data: {
+                            "command": "password",
+                            "pass": password,
+                            "custome": "false"
+                        }
+                    }
+                    // console.log("false block")
+                }
+                console.log(fcmMessage)
+                fcm.send(fcmMessage, (err, result) => {
+                    if (err) {
+                        response = {
+                            status: -1,
+                            body: {
+                                info: 'Message not sent',
+                                error: err,
+                                content: null
+                            }
+                        }
+                        res.send(response)
+                    }
+                    else {
+                        console.log('Notification sent to token id')
+                        response = {
+                            status: 1,
+                            body: {
+                                info: 'Successfully sent',
+                                error: null,
+                                content: result
+                            }
+                        }
+                        res.send(response)
+                    }
+                })
             }
-            res.send(response)
-        }
-    })
-    }
     })
 })
 
