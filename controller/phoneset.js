@@ -9,6 +9,7 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // recieves imei and 
 // device object with params os,battery,wifi,name,location
 router.post('/phone/set', checkparams, (req, res) => {
+	console.log(req)
     var response = {}
     Mobileinfo.findOneAndUpdate({ imei: req.body.imei }, { '$set': { 'ssid': req.body.ssid, 'battery': req.body.battery, 'brand': req.body.brand, 'model': req.body.model, 'gps': req.body.gps,'data': req.body.data }}, { new: true }, (err, data) => {
         if (!err && data) {

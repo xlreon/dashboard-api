@@ -8,6 +8,7 @@ router.use(bodyParser.urlencoded({ extended: true }))
 // get device details
 // recieves imei 
 router.post('/phone/get', checkparams, (req, res) => {
+    console.log(req.body)
     var response = {}
     Mobileinfo.findOne({ imei: req.body.imei }, (err, detail) => {
         if (!err && detail) {

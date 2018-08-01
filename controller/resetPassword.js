@@ -8,6 +8,7 @@ var tmpsalt = easyPbkdf2.generateSalt()
 var config = require('../keys/configBucket.json')
 var host_url = 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:8080'
 var md5 = require('md5');
+var User = require('../models/user');
 
 var transporter = nodemailer.createTransport(sesTransport({
     accessKeyId: config.accessKeyId,
@@ -21,42 +22,78 @@ var currentCode = -1;
 
 router.post('/forgetPassword',(req,res) => {
 var response = {}
-    // req.session.passCode = Math.floor((Math.random() * 10000) + 1)
-    req.session.passCode = md5(req.body.email)
+    req.session.passCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
     console.log(req.session.passCode)
     currentCode = req.session.passCode;
-    var mailOptions = {
-        from: config.email,
-        to: req.body.email,
-        subject: 'Verification of email',
-        text: 'please verify your email',
-        html: `<a href=${host_url}/reset/${req.session.passCode}><h1>Click here to reset your password</h1></a>`
-    };
-    transporter.sendMail(mailOptions, function (err, info) {
-        if (err) {
+
+    if(req.body.email) {
+        
+        User.findOne({email: req.body.email}, (err,user) => {
+
+            console.log(user)
+            if(err) {
+                response = {
+                    status: -2,
+                    body: {
+                        info: err
+                    }
+                }
+                res.send(response);
+            }
+            else if (!user) {
+                response = {
+                    status: -3,
+                    body: {
+                        info: "Email not found in database"
+                    }
+                }
+                res.send(response);
+            }
+            else {
+            var mailOptions = {
+                from: config.email,
+                to: user.email,
+                subject: 'Verification of email',
+                text: 'please verify your email',
+                html: `<a href=${host_url}/reset/${req.session.passCode}><h1>Click here to reset your password</h1></a>`
+            };
+            transporter.sendMail(mailOptions, function (err, info) {
+                if (err) {
+                    response = {
+                        status: -17,
+                        body: {
+                            info: "nodemailer smtp error",
+                            error: err,
+                            content: null
+                        }
+                    }
+                    res.send(response)
+                } else {
+                    console.log('Email sent: ' + info.envelope.to[0]);
+                    req.tmpsalt = tmpsalt
+                }
+            });
             response = {
-                status: -17,
+                status: 1,
                 body: {
-                    info: "nodemailer smtp error",
-                    error: err,
+                    info: "Reset link sent",
+                    error: null,
                     content: null
                 }
             }
-            res.send(response)
-        } else {
-            console.log('Email sent: ' + info.envelope.to[0]);
-            req.tmpsalt = tmpsalt
-        }
-    });
-    response = {
-        status: 1,
-        body: {
-            info: "Reset link sent",
-            error: null,
-            content: null
-        }
+            res.send(response);
+            }
+        })
     }
-    res.send(response);
+    else {
+        response = {
+            status: -1,
+            body: {
+                info: "Email address is blank"
+            }
+        }
+        res.send(response);
+    }
 })
 
 
