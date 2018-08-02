@@ -13,9 +13,9 @@ AWS.config.update(aws_access)
 var s3 = new AWS.S3()
 // update images type should be multipart/form-data
 // recieves imei and mult
-var response = []
 router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld be a file and name should be mult 
 	// console.log(req.files)
+    var response = []
 
     var missing = []
     if (!req.body.imei) {
