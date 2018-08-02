@@ -11,6 +11,7 @@ var md5 = require('md5');
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var secretKey = require('../keys/jwt')
+var TokenDb = require('../models/jwtToken');
 
 var transporter = nodemailer.createTransport(sesTransport({
     accessKeyId: config.accessKeyId,
@@ -59,38 +60,45 @@ var mailOptions = {}
                 }
                 console.log(token)
                 if(token) {
-                    mailOptions = {
-                        from: config.email,
-                        to: user.email,
-                        subject: 'Reset Password',
-                        text: 'please click on the link to reset your password',
-                        html: `<a href=${host_url}/reset/${token}><h1>Click here to reset your password</h1></a>`
-                    };
-                    transporter.sendMail(mailOptions, function (err, info) {
-                        if (err) {
+                    TokenDb.create({email: user.email,token: token},(err,data)=> {
+                        if(err) {
+                            res.send("Db error")
+                        }
+                        if(data) {
+                            mailOptions = {
+                                from: config.email,
+                                to: user.email,
+                                subject: 'Reset Password',
+                                text: 'please click on the link to reset your password',
+                                html: `<a href=${host_url}/reset/${token}><h1>Click here to reset your password</h1></a>`
+                            };
+                            transporter.sendMail(mailOptions, function (err, info) {
+                                if (err) {
+                                    response = {
+                                        status: -17,
+                                        body: {
+                                            info: "nodemailer smtp error",
+                                            error: err,
+                                            content: null
+                                        }
+                                    }
+                                    res.send(JSON.stringify(response))
+                                } else {
+                                    console.log('Email sent: ' + info.envelope.to[0]);
+                                    req.tmpsalt = tmpsalt
+                                }
+                            });
                             response = {
-                                status: -17,
+                                status: 1,
                                 body: {
-                                    info: "nodemailer smtp error",
-                                    error: err,
+                                    info: "Reset link sent",
+                                    error: null,
                                     content: null
                                 }
                             }
-                            res.send(JSON.stringify(response))
-                        } else {
-                            console.log('Email sent: ' + info.envelope.to[0]);
-                            req.tmpsalt = tmpsalt
+                            res.send(JSON.stringify(response));
                         }
-                    });
-                    response = {
-                        status: 1,
-                        body: {
-                            info: "Reset link sent",
-                            error: null,
-                            content: null
-                        }
-                    }
-                    res.send(JSON.stringify(response));
+                    })
                 }
             })
             }
