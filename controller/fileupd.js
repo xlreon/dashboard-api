@@ -13,16 +13,16 @@ AWS.config.update(aws_access)
 var s3 = new AWS.S3()
 // update images type should be multipart/form-data
 // recieves imei and mult
-router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showld be a file and name should be mult 
-	console.log(req.file.mimetype)
+var response = []
+router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld be a file and name should be mult 
+	// console.log(req.files)
 
-    var response = {}
     var missing = []
     if (!req.body.imei) {
         missing.push('imei')
     }
-    if (!req.file) {
-        missing.push('file')
+    if (!req.files) {
+        missing.push('files')
     }
 
     if (missing.length !== 0) {
@@ -40,74 +40,73 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
         var file, key, data_file
         Mobileinfo.findOne({ imei: req.body.imei }, (err, mobileinfo) => {
             if (!err && mobileinfo) {
-                console.log(req.file)
-                console.log(req.file.mimetype)
-                console.log('\n\n\n')
-
-                if (isValideFile(req.file.mimetype)) {
-                    key = `${Date.now().toString()}-${req.file.originalname}`
-                    file = {
-                        Bucket: bucketName,
-                        Body: req.file.buffer,
-                        Key: key,
-                        ContentType: req.file.mimetype
-                    }
-                    s3.upload(file, (err, data) => {
-                        if (!err) {
-                            console.log(data)
-                            data_file = { key: req.file.mimetype.split('/')[0], name: data.Key, location: data.Location }
-                            mobileinfo.files.push(data_file)
-                            mobileinfo.save((err, mobileinfo) => {
-                                if (!err) {
-                                    response = {
-                                        status: 7,
-                                        body: {
-                                            info: "user data uploaded and updated successfully",
-                                            error: null,
-                                            content: {
-                                                key: data_file.key,
-                                                name: data_file.name,
-                                                location: data_file.location
+                req.files.map((file,index)=> {
+                    var keyType = file.mimetype.split('/')[0]
+                    if (isValideFile(file.mimetype)) {
+                        key = `${Date.now().toString()}-${file.originalname}`
+                        uploadFile = {
+                            Bucket: bucketName,
+                            Body: file.buffer,
+                            Key: key,
+                            ContentType: file.mimetype
+                        }
+                        s3.upload(uploadFile, (err, data) => {
+                            if (!err) {
+                                // console.log(data)
+                                data_file = { key: keyType, name: data.Key, location: data.Location }
+                                mobileinfo.files.push(data_file)
+                                mobileinfo.save((err, mobileinfo) => {
+                                    if (!err) {
+                                        response.push({
+                                            status: 7,
+                                            body: {
+                                                info: "user data uploaded and updated successfully",
+                                                error: null,
+                                                content: {
+                                                    key: data_file.key,
+                                                    name: data_file.name,
+                                                    location: data_file.location
+                                                }
                                             }
-                                        }
+                                        })
+                                        index === req.files.length-1 ? res.send(response) : console.log(response)
+                                    } else {
+                                        response.push({
+                                            status: -3,
+                                            body: {
+                                                info: "imei and token db eroor",
+                                                error: err,
+                                                content: null
+                                            }
+                                        })
+                                        index === req.files.length-1 ? res.send(response) : console.log(response)
                                     }
-                                    res.send(response)
-                                } else {
-                                    response = {
-                                        status: -3,
-                                        body: {
-                                            info: "imei and token db eroor",
-                                            error: err,
-                                            content: null
-                                        }
+                                })
+                            } else {
+                                console.log(err)
+                                response.push({
+                                    status: -11,
+                                    body: {
+                                        info: "aws s3 error",
+                                        error: err,
+                                        content: null
                                     }
-                                    res.send(response)
-                                }
-                            })
-                        } else {
-                            console.log(err)
-                            response = {
-                                status: -11,
-                                body: {
-                                    info: "aws s3 error",
-                                    error: err,
-                                    content: null
-                                }
+                                })
+                                index === req.files.length-1 ? res.send(response) : console.log(response)
                             }
-                            res.send(response)
-                        }
-                    })
-                } else {
-                    response = {
-                        status: -12,
-                        body: {
-                            info: "invalid file type",
-                            error: null,
-                            content: null
-                        }
+                        })
+                    } else {
+                        response.push({
+                            status: -12,
+                            body: {
+                                info: "invalid file type",
+                                error: null,
+                                content: null
+                            }
+                        })
+                        index === req.files.length-1 ? res.send(response) : console.log(response)
                     }
-                    res.send(response)
-                }
+                })
             } else {
                 if (!mobileinfo) {
                     response = {
@@ -131,6 +130,7 @@ router.post('/file/upload', upload.single('mult'), (req, res) => { // mult showl
                     res.send(response)
                 }
             }
+
         })
     }
 })
