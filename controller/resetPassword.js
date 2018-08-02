@@ -58,7 +58,7 @@ var mailOptions = {}
                     email: user.email,
                     key: Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
                 }
-            jwt.sign({user: configToken},secretKey,{expiresIn: '1h'},(err,token) => {
+            jwt.sign({user: configToken},secretKey,{expiresIn: 300000},(err,token) => {
                 if(err) {
                     res.send("Token creation error.")
                 }
