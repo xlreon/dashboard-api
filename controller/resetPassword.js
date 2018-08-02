@@ -9,6 +9,8 @@ var config = require('../keys/configBucket.json')
 var host_url = 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:8080'
 var md5 = require('md5');
 var User = require('../models/user');
+var jwt = require('jsonwebtoken');
+var secretKey = require('../keys/jwt')
 
 var transporter = nodemailer.createTransport(sesTransport({
     accessKeyId: config.accessKeyId,
@@ -22,6 +24,7 @@ var currentCode = -1;
 
 router.post('/forgetPassword',(req,res) => {
 var response = {}
+var mailOptions = {}
     req.session.passCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
     console.log(req.session.passCode)
     currentCode = req.session.passCode;
@@ -50,38 +53,46 @@ var response = {}
                 res.send(JSON.stringify(response));
             }
             else {
-            var mailOptions = {
-                from: config.email,
-                to: user.email,
-                subject: 'Verification of email',
-                text: 'please verify your email',
-                html: `<a href=${host_url}/reset/${req.session.passCode}><h1>Click here to reset your password</h1></a>`
-            };
-            transporter.sendMail(mailOptions, function (err, info) {
-                if (err) {
+            jwt.sign({user: user.email},secretKey,(err,token) => {
+                if(err) {
+                    res.send("Token creation error.")
+                }
+                console.log(token)
+                if(token) {
+                    mailOptions = {
+                        from: config.email,
+                        to: user.email,
+                        subject: 'Verification of email',
+                        text: 'please verify your email',
+                        html: `<a href=${host_url}/reset/${token}><h1>Click here to reset your password</h1></a>`
+                    };
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if (err) {
+                            response = {
+                                status: -17,
+                                body: {
+                                    info: "nodemailer smtp error",
+                                    error: err,
+                                    content: null
+                                }
+                            }
+                            res.send(JSON.stringify(response))
+                        } else {
+                            console.log('Email sent: ' + info.envelope.to[0]);
+                            req.tmpsalt = tmpsalt
+                        }
+                    });
                     response = {
-                        status: -17,
+                        status: 1,
                         body: {
-                            info: "nodemailer smtp error",
-                            error: err,
+                            info: "Reset link sent",
+                            error: null,
                             content: null
                         }
                     }
-                    res.send(JSON.stringify(response))
-                } else {
-                    console.log('Email sent: ' + info.envelope.to[0]);
-                    req.tmpsalt = tmpsalt
+                    res.send(JSON.stringify(response));
                 }
-            });
-            response = {
-                status: 1,
-                body: {
-                    info: "Reset link sent",
-                    error: null,
-                    content: null
-                }
-            }
-            res.send(JSON.stringify(response));
+            })
             }
         })
     }
@@ -98,17 +109,18 @@ var response = {}
 
 
 router.get('/reset/:id',(req,res) => {
-    console.log(req.params.id,currentCode)
-    if (req.params.id == currentCode) {
-        console.log("Redirecting to update password page")
-        res.writeHead(301,
-            {Location: 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000/updatePass'}
-        );
-        res.end();
-    }
-    else {
-        console.log("invalid reset link.")
-    }
+    jwt.verify(req.params.id,secretKey,(err,data)=> {
+        if(err) {
+            res.send("Invalid reset link")
+        }
+        if(data) {
+            console.log("Redirecting to update password page")
+            res.writeHead(301,
+                {Location: 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000/updatePass'}
+            );
+            res.end();
+        }
+    })
 })
 
 module.exports = router
