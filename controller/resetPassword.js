@@ -53,7 +53,7 @@ var mailOptions = {}
                 res.send(JSON.stringify(response));
             }
             else {
-            jwt.sign({user: user.email},secretKey,(err,token) => {
+            jwt.sign({user: user.email},secretKey,{expiresIn: '1h'},(err,token) => {
                 if(err) {
                     res.send("Token creation error.")
                 }
@@ -62,8 +62,8 @@ var mailOptions = {}
                     mailOptions = {
                         from: config.email,
                         to: user.email,
-                        subject: 'Verification of email',
-                        text: 'please verify your email',
+                        subject: 'Reset Password',
+                        text: 'please click on the link to reset your password',
                         html: `<a href=${host_url}/reset/${token}><h1>Click here to reset your password</h1></a>`
                     };
                     transporter.sendMail(mailOptions, function (err, info) {
