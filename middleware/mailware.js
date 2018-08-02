@@ -30,7 +30,7 @@ function mailware(req, res, next) {
                     content: null
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         } else {
             console.log('Email sent: ' + info.response);
             req.tmpsalt = tmpsalt

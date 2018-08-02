@@ -27,7 +27,7 @@ callback = (err, passwordHash, originalSalt) => {
                     info: err
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
         console.log(user)
         console.log(req.body.otp)
@@ -56,7 +56,7 @@ callback = (err, passwordHash, originalSalt) => {
                                     content: null
                                 }
                             }
-                            res.send(response)
+                            res.send(JSON.stringify(response))
     
     
                         } else {
@@ -69,7 +69,7 @@ callback = (err, passwordHash, originalSalt) => {
                                     content: null
                                 }
                             }
-                            res.send(response)
+                            res.send(JSON.stringify(response))
                         }
                     })
                 } else {
@@ -82,7 +82,7 @@ callback = (err, passwordHash, originalSalt) => {
                             content: null
                         }
                     }
-                    res.send(response)
+                    res.send(JSON.stringify(response))
                 }
             })
         }
@@ -95,7 +95,7 @@ callback = (err, passwordHash, originalSalt) => {
                     error: true
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
     })
 }
@@ -108,7 +108,7 @@ callback = (err, passwordHash, originalSalt) => {
                 content: null
             }
         }
-        res.send(response)
+        res.send(JSON.stringify(response))
     }
 }
 

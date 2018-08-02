@@ -24,14 +24,14 @@ router.post('/getLatLng',(req,res)=>{
         	lat:r.data.location.lat,
         	lng:r.data.location.lng
         }
-        res.send(response)
+        res.send(JSON.stringify(response))
     })
     .catch(err => {
         console.log(err)
         let response={
         	status:-1
         }
-        res.send(response)
+        res.send(JSON.stringify(response))
     })
 
 })

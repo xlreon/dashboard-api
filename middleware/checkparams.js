@@ -90,7 +90,7 @@ function checkparams(req, res, next) { //req.route.path
         }
     }
 
-    res.send(response)
+    res.send(JSON.stringify(response))
 }
 
 module.exports = checkparams
