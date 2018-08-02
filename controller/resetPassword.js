@@ -26,15 +26,15 @@ var currentCode = -1;
 router.post('/forgetPassword',(req,res) => {
 var response = {}
 var mailOptions = {}
-    req.session.passCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
-    console.log(req.session.passCode)
+    // req.session.passCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
+    // console.log(req.session.passCode)
     currentCode = req.session.passCode;
 
     if(req.body.email) {
         
         User.findOne({email: req.body.email}, (err,user) => {
 
-            console.log(user)
+            // console.log(user)
             if(err) {
                 response = {
                     status: -2,
@@ -54,49 +54,98 @@ var mailOptions = {}
                 res.send(JSON.stringify(response));
             }
             else {
-            jwt.sign({user: user.email},secretKey,{expiresIn: '1h'},(err,token) => {
+                var configToken = {
+                    email: user.email,
+                    key: Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
+                }
+            jwt.sign({user: configToken},secretKey,{expiresIn: '1h'},(err,token) => {
                 if(err) {
                     res.send("Token creation error.")
                 }
                 console.log(token)
                 if(token) {
-                    TokenDb.create({email: user.email,token: token},(err,data)=> {
+                    TokenDb.findOne({email: user.email},(err,result) => {
                         if(err) {
-                            res.send("Db error")
+                            res.send('db error')
                         }
-                        if(data) {
-                            mailOptions = {
-                                from: config.email,
-                                to: user.email,
-                                subject: 'Reset Password',
-                                text: 'please click on the link to reset your password',
-                                html: `<a href=${host_url}/reset/${token}><h1>Click here to reset your password</h1></a>`
-                            };
-                            transporter.sendMail(mailOptions, function (err, info) {
-                                if (err) {
+                        if(result) {
+                            TokenDb.findOneAndUpdate({email: user.email},{'$set': {token: token}},(err,newResult) => {
+                                // console.log(data)
+                                mailOptions = {
+                                    from: config.email,
+                                    to: user.email,
+                                    subject: 'Reset Password',
+                                    text: 'please click on the link to reset your password',
+                                    html: `<a href=${host_url}/reset/${token}><h1>Click here to reset your password</h1></a>`
+                                };
+                                transporter.sendMail(mailOptions, function (err, info) {
+                                    if (err) {
+                                        response = {
+                                            status: -17,
+                                            body: {
+                                                info: "nodemailer smtp error",
+                                                error: err,
+                                                content: null
+                                            }
+                                        }
+                                        res.send(JSON.stringify(response))
+                                    } else {
+                                        console.log('Email sent: ' + info.envelope.to[0]);
+                                        req.tmpsalt = tmpsalt
+                                    }
+                                });
+                                response = {
+                                    status: 1,
+                                    body: {
+                                        info: "Reset link sent",
+                                        error: null,
+                                        content: null
+                                    }
+                                }
+                                res.send(JSON.stringify(response));
+                            })
+                        }
+                        else {
+                            TokenDb.create({email: user.email,token: token},(err,data)=> {
+                                if(err) {
+                                    res.send("Db error")
+                                }
+                                if(data) {
+                                    // console.log(data)
+                                    mailOptions = {
+                                        from: config.email,
+                                        to: user.email,
+                                        subject: 'Reset Password',
+                                        text: 'please click on the link to reset your password',
+                                        html: `<a href=${host_url}/reset/${token}><h1>Click here to reset your password</h1></a>`
+                                    };
+                                    transporter.sendMail(mailOptions, function (err, info) {
+                                        if (err) {
+                                            response = {
+                                                status: -17,
+                                                body: {
+                                                    info: "nodemailer smtp error",
+                                                    error: err,
+                                                    content: null
+                                                }
+                                            }
+                                            res.send(JSON.stringify(response))
+                                        } else {
+                                            console.log('Email sent: ' + info.envelope.to[0]);
+                                            req.tmpsalt = tmpsalt
+                                        }
+                                    });
                                     response = {
-                                        status: -17,
+                                        status: 1,
                                         body: {
-                                            info: "nodemailer smtp error",
-                                            error: err,
+                                            info: "Reset link sent",
+                                            error: null,
                                             content: null
                                         }
                                     }
-                                    res.send(JSON.stringify(response))
-                                } else {
-                                    console.log('Email sent: ' + info.envelope.to[0]);
-                                    req.tmpsalt = tmpsalt
+                                    res.send(JSON.stringify(response));
                                 }
-                            });
-                            response = {
-                                status: 1,
-                                body: {
-                                    info: "Reset link sent",
-                                    error: null,
-                                    content: null
-                                }
-                            }
-                            res.send(JSON.stringify(response));
+                            })
                         }
                     })
                 }

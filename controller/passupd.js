@@ -17,22 +17,24 @@ router.post('/password/update', checkparams, (req, res) => {
     var response = {}
     var hashedPassword = req.body.password
     TokenDb.findOne({email: req.body.email},(err,data) => {
+        // console.log(data)
         if(err) {
             res.send("Error while getting token from db")
         }
         if(data) {
             jwt.verify(data.token,secretKey,(err,data)=> {
                 if(err) {
-                    res.send("Invalid reset link")
+                    res.send(err)
                 }
                 if(data) {
-                    console.log(data)
-                    if(data.user === req.body.email) {
+                    // console.log(data.user.email)
+                    if(data.user.email === req.body.email) {
                         callback = (err, passwordHash, originalSalt) => {
                                 if (!err) {
                                     hashedPassword = passwordHash
                             User.findOneAndUpdate({ email: req.body.email }, { '$set': { 'hashedPassword': hashedPassword, 'salt': salt } }, { new: true }, (err, user) => {
                                 if (!err && user) {
+                                    console.log(user)
                                     response = {
                                         status: 9,
                                         body: {
