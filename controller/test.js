@@ -30,7 +30,7 @@ router.get("/test", (req, res) => {
                     content: null
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
         else {
             console.log('Notidication sent to token id')
@@ -42,7 +42,7 @@ router.get("/test", (req, res) => {
                     content: result
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
     })
 })

@@ -26,7 +26,7 @@ router.post('/phone/get', checkparams, (req, res) => {
                         data: JSON.parse(detail.data)
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             } else {
                 response = {
                     status: -10,
@@ -36,7 +36,7 @@ router.post('/phone/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
         } else {
             if (!data) {
@@ -48,7 +48,7 @@ router.post('/phone/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             } else {
                 response = {
                     status: -3,
@@ -58,7 +58,7 @@ router.post('/phone/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
         }
     })

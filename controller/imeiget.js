@@ -25,7 +25,7 @@ router.post('/imei/get', checkparams, (req, res) => {
                     content: imei_arr
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         } else {
             if (!user) {
                 response = {
@@ -36,7 +36,7 @@ router.post('/imei/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             } else {
                 response = {
                     status: -2,
@@ -46,7 +46,7 @@ router.post('/imei/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
         }
     })

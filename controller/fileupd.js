@@ -34,7 +34,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                 content: missing
             }
         }
-        res.send(response)
+        res.send(JSON.stringify(response))
     } else {
 
         var file, key, data_file
@@ -69,7 +69,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                                                 }
                                             }
                                         })
-                                        index === req.files.length-1 ? res.send(response) : console.log(response)
+                                        index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
                                     } else {
                                         response.push({
                                             status: -3,
@@ -79,7 +79,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                                                 content: null
                                             }
                                         })
-                                        index === req.files.length-1 ? res.send(response) : console.log(response)
+                                        index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
                                     }
                                 })
                             } else {
@@ -92,7 +92,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                                         content: null
                                     }
                                 })
-                                index === req.files.length-1 ? res.send(response) : console.log(response)
+                                index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
                             }
                         })
                     } else {
@@ -104,7 +104,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                                 content: null
                             }
                         })
-                        index === req.files.length-1 ? res.send(response) : console.log(response)
+                        index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
                     }
                 })
             } else {
@@ -117,7 +117,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                             content: null
                         }
                     }
-                    res.send(response)
+                    res.send(JSON.stringify(response))
                 } else {
                     response = {
                         status: -3,
@@ -127,7 +127,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                             content: null
                         }
                     }
-                    res.send(response)
+                    res.send(JSON.stringify(response))
                 }
             }
 

@@ -26,7 +26,7 @@ router.post('/file/db/get', checkparams, (req, res) => {
                         content: data_file
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             } else {
                 response = {
                     status: -8,
@@ -36,7 +36,7 @@ router.post('/file/db/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
         } else {
             if (!mobileinfo) {
@@ -48,7 +48,7 @@ router.post('/file/db/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             } else {
                 response = {
                     status: -3,
@@ -58,7 +58,7 @@ router.post('/file/db/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
         }
     })

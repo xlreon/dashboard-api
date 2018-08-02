@@ -38,7 +38,7 @@ var response = {}
                         info: err
                     }
                 }
-                res.send(response);
+                res.send(JSON.stringify(response));
             }
             else if (!user) {
                 response = {
@@ -47,7 +47,7 @@ var response = {}
                         info: "Email not found in database"
                     }
                 }
-                res.send(response);
+                res.send(JSON.stringify(response));
             }
             else {
             var mailOptions = {
@@ -67,7 +67,7 @@ var response = {}
                             content: null
                         }
                     }
-                    res.send(response)
+                    res.send(JSON.stringify(response))
                 } else {
                     console.log('Email sent: ' + info.envelope.to[0]);
                     req.tmpsalt = tmpsalt
@@ -81,7 +81,7 @@ var response = {}
                     content: null
                 }
             }
-            res.send(response);
+            res.send(JSON.stringify(response));
             }
         })
     }
@@ -92,7 +92,7 @@ var response = {}
                 info: "Email address is blank"
             }
         }
-        res.send(response);
+        res.send(JSON.stringify(response));
     }
 })
 

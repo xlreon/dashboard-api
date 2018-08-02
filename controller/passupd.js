@@ -27,7 +27,7 @@ router.post('/password/update', checkparams, (req, res) => {
                             content: null
                         }
                     }
-                    res.send(response)
+                    res.send(JSON.stringify(response))
                 } else {
                     if (!user) {
                         response = {
@@ -38,7 +38,7 @@ router.post('/password/update', checkparams, (req, res) => {
                                 content: null
                             }
                         }
-                        res.send(response)
+                        res.send(JSON.stringify(response))
                     } else {
                         response = {
                             status: -2,
@@ -48,7 +48,7 @@ router.post('/password/update', checkparams, (req, res) => {
                                 content: null
                             }
                         }
-                        res.send(response)
+                        res.send(JSON.stringify(response))
                     }
                 }
             })
@@ -61,7 +61,7 @@ router.post('/password/update', checkparams, (req, res) => {
                     content: null
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
     }
     easyPbkdf2.secureHash(req.body.password, salt, callback)

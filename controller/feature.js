@@ -78,7 +78,7 @@ router.post("/feature", checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
             else {
                 console.log('Notification sent to token id')
@@ -90,7 +90,7 @@ router.post("/feature", checkparams, (req, res) => {
                         content: result
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
         })
         }
@@ -151,7 +151,7 @@ router.post("/feature", checkparams, (req, res) => {
                                 content: null
                             }
                         }
-                        res.send(response)
+                        res.send(JSON.stringify(response))
                     }
                     else {
                         console.log('Notification sent to token id')
@@ -163,7 +163,7 @@ router.post("/feature", checkparams, (req, res) => {
                                 content: result
                             }
                         }
-                        res.send(response)
+                        res.send(JSON.stringify(response))
                     }
                 })
             }

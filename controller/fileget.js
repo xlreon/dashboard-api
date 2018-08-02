@@ -25,7 +25,7 @@ router.post('/file/get', checkparams, (req, res) => {
                     content: file
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         } else {
             if (!file) {
                 response = {
@@ -36,7 +36,7 @@ router.post('/file/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             } else {
                 response = {
                     status: -11,
@@ -46,7 +46,7 @@ router.post('/file/get', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             }
         }
     })

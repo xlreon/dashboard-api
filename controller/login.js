@@ -29,7 +29,7 @@ router.post('/login', checkparams, (req, res) => {
                         content: null
                     }
                 }
-                res.send(response)
+                res.send(JSON.stringify(response))
             } else {
                 easyPbkdf2.secureHash(req.body.password, user.salt, callback)
             }
@@ -42,7 +42,7 @@ router.post('/login', checkparams, (req, res) => {
                     content: null
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
     })
     callback = (err, passwordHash, originalSalt) => {
@@ -67,7 +67,7 @@ router.post('/login', checkparams, (req, res) => {
                                                     content: null
                                                 }
                                             }
-                                            res.send(response)
+                                            res.send(JSON.stringify(response))
                                         } else {
                                             response = {
                                                 status: -2,
@@ -77,7 +77,7 @@ router.post('/login', checkparams, (req, res) => {
                                                     content: null
                                                 }
                                             }
-                                            res.send(response)
+                                            res.send(JSON.stringify(response))
                                         }
                                     })
                                 } else {
@@ -89,7 +89,7 @@ router.post('/login', checkparams, (req, res) => {
                                             content: null
                                         }
                                     }
-                                    res.send(response)
+                                    res.send(JSON.stringify(response))
                                 }
                             })
 
@@ -104,7 +104,7 @@ router.post('/login', checkparams, (req, res) => {
                                     }
                                 }
                             }
-                            res.send(response)
+                            res.send(JSON.stringify(response))
                         }
                     // } else {
                     //     response = {
@@ -117,7 +117,7 @@ router.post('/login', checkparams, (req, res) => {
                     //             }
                     //         }
                     //     }
-                    //     res.send(response)
+                    //     res.send(JSON.stringify(response))
                     // }
                 } else {
                     response = {
@@ -128,7 +128,7 @@ router.post('/login', checkparams, (req, res) => {
                             content: null
                         }
                     }
-                    res.send(response)
+                    res.send(JSON.stringify(response))
                 }
             })
         } else {
@@ -140,7 +140,7 @@ router.post('/login', checkparams, (req, res) => {
                     content: null
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
     }
 })

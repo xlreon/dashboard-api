@@ -52,7 +52,7 @@ router.post('/register', checkparams, (req, res) => {
                             content: null
                         }
                     }
-                    res.send(response)
+                    res.send(JSON.stringify(response))
                 } else {
                     if (!userext) {
                         // console.log(req.session.otp)
@@ -70,7 +70,7 @@ router.post('/register', checkparams, (req, res) => {
                                                         content: null
                                                     }
                                                 }
-                                                res.send(response)
+                                                res.send(JSON.stringify(response))
                                             } else {
                                                 console.log('Email sent: ' + info.envelope.to[0]);
                                                 req.tmpsalt = tmpsalt
@@ -84,7 +84,7 @@ router.post('/register', checkparams, (req, res) => {
                                                 content: null
                                             }
                                         }
-                                        res.send(response);
+                                        res.send(JSON.stringify(response));
                                     }
                                     else {
                                         reponse = {
@@ -111,7 +111,7 @@ router.post('/register', checkparams, (req, res) => {
                                                     content: null
                                                 }
                                             }
-                                            res.send(response)
+                                            res.send(JSON.stringify(response))
                                         } else {
                                             console.log('Email sent: ' + info.envelope.to[0]);
                                             req.tmpsalt = tmpsalt
@@ -125,7 +125,7 @@ router.post('/register', checkparams, (req, res) => {
                                             content: null
                                         }
                                     }
-                                    res.send(response);
+                                    res.send(JSON.stringify(response));
                                 }
                                 else {
                                     reponse = {
@@ -149,7 +149,7 @@ router.post('/register', checkparams, (req, res) => {
                                 content: null
                             }
                         }
-                        res.send(response)
+                        res.send(JSON.stringify(response))
                     }
                 }
             })
@@ -162,7 +162,7 @@ router.post('/register', checkparams, (req, res) => {
                     content: null
                 }
             }
-            res.send(response)
+            res.send(JSON.stringify(response))
         }
     }
 

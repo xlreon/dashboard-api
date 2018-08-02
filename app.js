@@ -37,7 +37,7 @@ routes.map((route) => app.use(route))
 
 // root route
 app.get('/', (req, res) => {
-    res.send('hello world')
+    res.send(JSON.stringify('hello world'))
 })
 
 // server port http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com://8080
