@@ -14,7 +14,7 @@ router.post('/checkOtp',(req,res) => {
 
     var response = {}
     var hashedPassword = req.body.password
-
+    console.log("pass->",hashedPassword)
 callback = (err, passwordHash, originalSalt) => {
     if (!err) {
         hashedPassword = passwordHash
