@@ -69,7 +69,7 @@ var mailOptions = {}
                             res.send('db error')
                         }
                         if(result) {
-                            TokenDb.findOneAndUpdate({email: user.email},{'$set': {token: token}},(err,newResult) => {
+                            TokenDb.findOneAndUpdate({email: user.email},{'$set': {token: token,resetClicked: false}},(err,newResult) => {
                                 // console.log(data)
                                 mailOptions = {
                                     from: config.email,
@@ -106,7 +106,7 @@ var mailOptions = {}
                             })
                         }
                         else {
-                            TokenDb.create({email: user.email,token: token},(err,data)=> {
+                            TokenDb.create({email: user.email,token: token,resetClicked: false},(err,data)=> {
                                 if(err) {
                                     res.send("Db error")
                                 }
@@ -171,11 +171,18 @@ router.get('/reset/:id',(req,res) => {
             res.send("Invalid reset link")
         }
         if(data) {
-            console.log("Redirecting to update password page")
-            res.writeHead(301,
-                {Location: 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000/updatePass'}
-            );
-            res.end();
+            TokenDb.findOneAndUpdate({email: data.user.email},{'$set': {resetClicked: true}},(err,result) => {
+                if(err) {
+                    res.send(err)
+                }
+                if(result) {
+                    console.log("Redirecting to update password page")
+                    res.writeHead(301,
+                        {Location: 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000/updatePass'}
+                    );
+                    res.end();
+                }
+            })
         }
     })
 })

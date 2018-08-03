@@ -16,19 +16,19 @@ router.use(bodyParser.urlencoded({ extended: true }))
 router.post('/password/update', checkparams, (req, res) => {
     var response = {}
     var hashedPassword = req.body.password
-    TokenDb.findOne({email: req.body.email},(err,data) => {
+    TokenDb.findOne({email: req.body.email},(err,dbData) => {
         // console.log(data)
         if(err) {
             res.send("Error while getting token from db")
         }
-        if(data) {
-            jwt.verify(data.token,secretKey,(err,data)=> {
+        if(dbData) {
+            jwt.verify(dbData.token,secretKey,(err,data)=> {
                 if(err) {
                     res.send(err)
                 }
                 if(data) {
-                    // console.log(data.user.email)
-                    if(data.user.email === req.body.email) {
+                    console.log(dbData.resetClicked)
+                    if(data.user.email === req.body.email && dbData.resetClicked) {
                         callback = (err, passwordHash, originalSalt) => {
                                 if (!err) {
                                     hashedPassword = passwordHash
@@ -83,10 +83,10 @@ router.post('/password/update', checkparams, (req, res) => {
                     }
                     easyPbkdf2.secureHash(req.body.password, salt, callback)
                 }
+                else {
+                        res.send("invalid reset request")
+                    }
             }
-            else {
-                    res.send("invalid reset request")
-                }
             })
         }
         else {
