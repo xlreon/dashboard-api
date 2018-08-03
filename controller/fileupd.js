@@ -46,7 +46,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                         key = `${req.body.imei}/`
                         var createFolder = {
                             Bucket: bucketName,
-                            // Body: file.buffer,
+                            Body: 'new folder',
                             ACL: 'public-read',
                             Key: key,
                             // ContentType: file.mimetype
