@@ -43,7 +43,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                 req.files.map((file,index)=> {
                     var keyType = file.mimetype.split('/')[0]
                     if (isValideFile(file.mimetype)) {
-                        key = `${req.body.imei}/`
+                        key = `${Date.now().toString()}-${file.originalname}`
                         uploadFile = {
                             Bucket: `${bucketName}/${req.body.imei}`,
                             Body: file.buffer,
