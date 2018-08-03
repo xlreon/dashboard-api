@@ -44,43 +44,52 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                     var keyType = file.mimetype.split('/')[0]
                     if (isValideFile(file.mimetype)) {
                         key = `${req.body.imei}/`
-                        uploadFile = {
+                        var createFolder = {
                             Bucket: bucketName,
-                            Body: file.buffer,
+                            // Body: file.buffer,
+                            ACL: 'public-read',
                             Key: key,
-                            ContentType: file.mimetype
+                            // ContentType: file.mimetype
                         }
-                        s3.upload(uploadFile, (err, data) => {
+                        s3.upload(createFolder, (err, data) => {
                             if (!err) {
-                                // console.log(data)
-                                data_file = { key: keyType, name: data.Key, location: data.Location }
-                                mobileinfo.files.push(data_file)
-                                mobileinfo.save((err, mobileinfo) => {
-                                    if (!err) {
-                                        response.push({
-                                            status: 7,
-                                            body: {
-                                                info: "user data uploaded and updated successfully",
-                                                error: null,
-                                                content: {
-                                                    key: data_file.key,
-                                                    name: data_file.name,
-                                                    location: data_file.location
+                                uploadFile= {
+                                    Bucket: bucketName,
+                                    Body: file.buffer,
+                                    Key: key,
+                                    ContentType: file.mimetype
+                                }
+                                s3.putObject(uploadFile,(err,data) => {
+                                    // console.log(data)
+                                    data_file = { key: keyType, name: data.Key, location: data.Location }
+                                    mobileinfo.files.push(data_file)
+                                    mobileinfo.save((err, mobileinfo) => {
+                                        if (!err) {
+                                            response.push({
+                                                status: 7,
+                                                body: {
+                                                    info: "user data uploaded and updated successfully",
+                                                    error: null,
+                                                    content: {
+                                                        key: data_file.key,
+                                                        name: data_file.name,
+                                                        location: data_file.location
+                                                    }
                                                 }
-                                            }
-                                        })
-                                        index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
-                                    } else {
-                                        response.push({
-                                            status: -3,
-                                            body: {
-                                                info: "imei and token db eroor",
-                                                error: err,
-                                                content: null
-                                            }
-                                        })
-                                        index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
-                                    }
+                                            })
+                                            index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
+                                        } else {
+                                            response.push({
+                                                status: -3,
+                                                body: {
+                                                    info: "imei and token db eroor",
+                                                    error: err,
+                                                    content: null
+                                                }
+                                            })
+                                            index === req.files.length-1 ? res.send(JSON.stringify(response)) : console.log(response)
+                                        }
+                                    })
                                 })
                             } else {
                                 console.log(err)
