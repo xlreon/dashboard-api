@@ -54,12 +54,12 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                         s3.upload(createFolder, (err, data) => {
                             if (!err) {
                                 uploadFile= {
-                                    Bucket: bucketName,
+                                    Bucket: `${bucketName}/${req.body.imei}`,
                                     Body: file.buffer,
                                     Key: key,
                                     ContentType: file.mimetype
                                 }
-                                s3.putObject(uploadFile,(err,data) => {
+                                s3.uploadFile(uploadFile,(err,data) => {
                                     // console.log(data)
                                     data_file = { key: keyType, name: data.Key, location: data.Location }
                                     mobileinfo.files.push(data_file)
