@@ -12,6 +12,7 @@
     "aws-sdk": "^2.279.1",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "connect-timeout": "^1.9.0",
     "cors": "^2.8.4",
     "easy-pbkdf2": "^0.1.2",
     "email-templates": "^4.0.1",

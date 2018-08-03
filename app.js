@@ -2,6 +2,7 @@ var express = require('express')
 var mongoose = require('mongoose')
 var cors = require('cors');
 var storeSession = require('./middleware/sessionStore');
+var timeout = require('connect-timeout');
 
 
 var app = express()
@@ -31,6 +32,7 @@ routes = [
 
 // app.use(cors({ origin: 'http://http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000' }));
 app.use(cors());
+app.use(timeout('6s'))
 storeSession(app);
 // use routers
 routes.map((route) => app.use(route))
