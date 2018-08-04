@@ -178,7 +178,7 @@ router.get('/reset/:id',(req,res) => {
                 if(result) {
                     console.log("Redirecting to update password page")
                     res.writeHead(301,
-                        {Location: 'http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000/updatePass'}
+                        {Location: 'http://ec2-18-191-40-143.us-east-2.compute.amazonaws.com:3000/updatePass'}
                     );
                     res.end();
                 }
