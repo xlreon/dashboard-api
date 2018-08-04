@@ -38,6 +38,9 @@ var commands = {
     "preventOff": {
         "command": "prevent",
         "action": "off"
+    },
+    "contact": {
+        "command": "Contacts"
     }
 }
 
