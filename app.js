@@ -32,7 +32,7 @@ routes = [
 
 // app.use(cors({ origin: 'http://http://ec2-18-216-27-235.us-east-2.compute.amazonaws.com:3000' }));
 app.use(cors());
-app.use(timeout('6s'))
+app.use(timeout('10s'))
 storeSession(app);
 // use routers
 routes.map((route) => app.use(route))

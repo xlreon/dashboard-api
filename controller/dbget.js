@@ -3,41 +3,50 @@ var router = express.Router()
 var Mobileinfo = require('../models/mobileinfo')
 var bodyParser = require("body-parser")
 var checkparams = require('../middleware/checkparams')
-
+var urlExist = require('url-exists');
+var delay = require('delay')
 router.use(bodyParser.urlencoded({ extended: true }))
 // gets the list of specific type file from db
 // recieves imei and type (images,videos,contacts)
+var nData = []
 router.post('/file/db/get', checkparams, (req, res) => {
     var response = {}
     var data_file = []
     Mobileinfo.findOne({ imei: req.body.imei }, (err, mobileinfo) => {
         if (!err && mobileinfo) {
-            for (i = 0; i < mobileinfo.files.length; i++) {
-                if (mobileinfo.files[i].key === req.body.type) {
-                    data_file.push(mobileinfo.files[i])
-                }
-            }
-            if (data_file.length != 0) {
-                response = {
-                    status: 5,
-                    body: {
-                        info: "user data found successfully in db",
-                        error: null,
-                        content: data_file
-                    }
-                }
-                res.send(JSON.stringify(response))
-            } else {
-                response = {
-                    status: -8,
-                    body: {
-                        info: "user data empty or invalid file type",
-                        error: null,
-                        content: null
-                    }
-                }
-                res.send(JSON.stringify(response))
-            }
+        mobileinfo.files.map((file,key) => {
+            urlExist(file.location,(err,data) =>{
+                        // console.log(data)
+                        if (data) {
+                            if(key!== mobileinfo.files.length-1) {
+                                nData.push(file)
+                            }
+                            else {
+                                nData.push(file)
+                                response = {
+                                    status: 5,
+                                    body: {
+                                        info: "user data found successfully in db",
+                                        error: null,
+                                        content: nData
+                                    }
+                                }
+                                res.send(JSON.stringify(response))
+                            }
+                        }
+                            if(key === mobileinfo.files.length-1 && nData.length === 0) {
+                                response = {
+                                    status: -8,
+                                    body: {
+                                        info: "user data empty or invalid file type",
+                                        error: null,
+                                        content: null
+                                    }
+                                }
+                                res.send(JSON.stringify(response))
+                            }
+                    })
+                })
         } else {
             if (!mobileinfo) {
                 response = {
@@ -63,5 +72,8 @@ router.post('/file/db/get', checkparams, (req, res) => {
         }
     })
 })
+
+
+
 
 module.exports = router

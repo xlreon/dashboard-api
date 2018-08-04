@@ -9,11 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async-wait-until": "^1.2.4",
     "aws-sdk": "^2.279.1",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "connect-timeout": "^1.9.0",
     "cors": "^2.8.4",
+    "delay": "^3.0.0",
+    "desync": "^1.1.2",
     "easy-pbkdf2": "^0.1.2",
     "email-templates": "^4.0.1",
     "express": "^4.16.3",
@@ -26,6 +29,10 @@
     "multer": "^1.3.1",
     "nodemailer": "^4.6.7",
     "nodemailer-ses-transport": "^1.5.1",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "sync": "^0.2.5",
+    "url-exists": "^1.0.3",
+    "wait.for": "^0.6.6",
+    "waitfor": "^0.1.3"
   }
 }

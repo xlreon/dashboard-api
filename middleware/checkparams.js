@@ -53,7 +53,7 @@ function checkparams(req, res, next) { //req.route.path
             break
         case '/file/db/get':
             if (!req.body.imei) { missing.push('imei') }
-            if (!req.body.type) { missing.push('type') }
+            // if (!req.body.type) { missing.push('type') }
             break
         case '/feature':
             if (!req.body.featureName) { missing.push('featureName') }
