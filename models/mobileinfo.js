@@ -20,7 +20,7 @@ var mobileinfo = mongoose.Schema({
     //     }
     // },
     files: [{
-        key: String,
+        // key: String,
         name: String,
         location: String
     }]
