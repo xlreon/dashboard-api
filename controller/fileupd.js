@@ -48,7 +48,7 @@ router.post('/file/upload', upload.any('mult'), (req, res) => { // mult showld b
                             Bucket: `${bucketName}/${req.body.imei}`,
                             Body: file.buffer,
                             Key: key,
-                            ContentType: file.mimetype
+                            // ContentType: file.mimetype
                         }
                         s3.upload(uploadFile, (err, data) => {
                             if (!err) {
