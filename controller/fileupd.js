@@ -140,7 +140,7 @@ function isValideFile(file_type) {
     if (['x-matroska','*', 'matroska', 'mp4', '3gpp', '3gp', 'webm', 'png', 'jpeg', 'bmp', 'gif', 'x-vcard', 'vnd.ms-excel'].indexOf(file_type.split('/')[1]) !== -1) {
         return true
     } else {
-        return true
+        return false
     }
 }
 
