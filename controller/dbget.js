@@ -17,7 +17,8 @@ router.post('/file/db/get', checkparams, (req, res) => {
         mobileinfo.files.map((file,key) => {
             urlExist(file.location,(err,data) =>{
                         // console.log(data)
-                        if (data) {
+                        var imei = file.location.split('/').filter(ele => ele === req.body.imei)[0] 
+                        if (data && imei === req.body.imei) {
                             if(key!== mobileinfo.files.length-1) {
                                 nData.push(file)
                             }
